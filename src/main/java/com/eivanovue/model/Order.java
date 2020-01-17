@@ -2,11 +2,10 @@ package com.eivanovue.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.apache.velocity.util.ArrayListWrapper;
-import org.joda.time.LocalDate;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class Order {
   private long id;
 
   @JsonFormat(pattern = "dd/MM/yyyy")
-  private LocalDate dateCreated;
+  private LocalDateTime dateCreated;
 
   private String status;
 
@@ -51,11 +50,11 @@ public class Order {
     this.id = id;
   }
 
-  public LocalDate getDateCreated() {
+  public LocalDateTime getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(LocalDate dateCreated) {
+  public void setDateCreated(LocalDateTime dateCreated) {
     this.dateCreated = dateCreated;
   }
 

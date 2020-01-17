@@ -2,10 +2,10 @@ package com.eivanovue.service;
 
 import com.eivanovue.model.Order;
 import com.eivanovue.repository.OrderRepository;
-import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -24,7 +24,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Order create(Order order) {
-    order.setDateCreated(LocalDate.now());
+    order.setDateCreated(LocalDateTime.now());
     return this.orderRepository.save(order);
   }
 

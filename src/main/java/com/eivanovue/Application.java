@@ -17,8 +17,8 @@ public class Application {
 	@Bean
 	CommandLineRunner runner(ProductService productService) {
 		return args -> {
-			productService.save(new Product("Nike Air Force 1x", 74.99, ""));
-			productService.save(new Product("Nike Air Force 7x", 43.99, ""));
+			productService.save(new Product("Nike Air Force 1x", 74.99, "https://www.samuel-windsor.co.uk/images/products/zoom/z-F-BV3.jpg"));
+			productService.save(new Product("Nike Air Force 7x", 43.99, "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ2P2hybBQrv4wdXHVLGVJRbmYVYv5--bvAH3ybDvKUzyidSAw2S4po4eMjPz4vo2ALxy3JStWKbg&usqp=CAY"));
 		};
 	}
 }
