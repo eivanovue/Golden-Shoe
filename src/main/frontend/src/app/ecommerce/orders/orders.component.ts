@@ -28,6 +28,7 @@ export class OrdersComponent implements OnInit {
 
   pay() {
     this.paid = true;
+    console.log(this.orders);
     this.ecommerceService.saveOrder(this.orders).subscribe();
   }
 

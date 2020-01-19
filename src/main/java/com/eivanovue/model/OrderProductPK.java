@@ -29,7 +29,7 @@ public class OrderProductPK implements Serializable {
     this.order = order;
   }
 
-  Product getProduct() {
+  public Product getProduct() {
     return product;
   }
 

@@ -6,18 +6,28 @@
       </div>
       <div class="card-body">
         <a href="#"><img class="card-img-top" src={{order.product.pictureUrl}} alt=""></a>
-        <h5 class="card-title">${{order.product.price}}</h5>
-        <div class="row">
-          <div class="col-4 padding-0" *ngIf="!isProductSelected(order.product)">
-            <input type="number" min="0" class="form-control" [(ngModel)]=order.quantity>
+        <h5 class="card-title">
+          ${{order.product.price}}
+        </h5>
+        <div *ngIf="!isProductSelected(order.product)">
+          <select  class="form-control" id="sel {{order.product.id}}">
+            <option (click)="this.unsetProductSize(order)" selected>Select size...</option>
+            <option  (click)="this.setProductSize(order, size.id, size.size, size.stock)" *ngFor="let size of order.product.productSize">{{size.size}}</option>
+          </select>
+          <hr>
+          <div *ngIf="order.size"> <p class="stock">Items available: {{order.size.stock}}</p></div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-4 padding-0" *ngIf="!isProductSelected(order.product) && order.size">
+            <input type="number" min="0"  max="{{order.size.stock}}" class="form-control" [(ngModel)]=order.quantity>
           </div>
-          <div class="col-4 padding-0" *ngIf="!isProductSelected(order.product)">
-            <button class="btn btn-primary" (click)="addToCart(order)"
-                    [disabled]="order.quantity <= 0">Add To Cart
+          <div class="col-6 padding-0" *ngIf="!isProductSelected(order.product) && order.size">
+            <button class="btn btn-success" (click)="addToCart(order)"
+                    [disabled]="order.quantity <= 0 || order.quantity > order.size.stock" >Add To Cart
             </button>
           </div>
           <div class="col-12" *ngIf="isProductSelected(order.product)">
-            <button class="btn btn-primary btn-block"
+            <button class="btn btn-outline-danger btn-block"
                     (click)="removeFromCart(order)">Remove From Cart
             </button>
           </div>
@@ -26,3 +36,5 @@
     </div>
   </div>
 </div>
+
+

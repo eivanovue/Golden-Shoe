@@ -4,4 +4,6 @@ import com.eivanovue.model.OrderProduct;
 
 public interface OrderProductService {
   OrderProduct create(OrderProduct orderProduct);
+
+  void calculateStock(OrderProduct orderProduct);
 }

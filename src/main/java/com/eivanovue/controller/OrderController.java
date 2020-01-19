@@ -39,6 +39,7 @@ public class OrderController {
 
   @PostMapping
   public ResponseEntity<Order> create(@RequestBody OrderForm form) {
+
     List<OrderProductDto> formDtos = form.getProductOrders();
     validateProductsExistence(formDtos);
 
@@ -51,11 +52,13 @@ public class OrderController {
     for(OrderProductDto dto : formDtos){
       orderProducts.add(orderProductService.create(new OrderProduct(order, productService.getProduct(dto
         .getProduct()
-        .getId()), dto.getQuantity())));
+        .getId()), dto.getQuantity(), dto.getProductSize())));
     }
 
     order.setOrderProducts(orderProducts);
     this.orderService.update(order);
+
+    calculateStocks(orderProducts);
 
     String uri = ServletUriComponentsBuilder
       .fromCurrentServletMapping()
@@ -82,8 +85,13 @@ public class OrderController {
     }
   }
 
+  private void calculateStocks(List<OrderProduct> orderProducts) {
+    orderProducts.forEach(orderProductService::calculateStock);
+  }
+
   public static class OrderForm {
     private List<OrderProductDto> productOrders;
+
     List<OrderProductDto> getProductOrders() {
       return productOrders;
     }

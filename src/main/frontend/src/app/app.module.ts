@@ -7,9 +7,10 @@ import { EcommerceComponent } from './ecommerce/ecommerce.component';
 import { ProductsComponent } from './ecommerce/products/products.component';
 import { OrdersComponent } from './ecommerce/orders/orders.component';
 import { ShoppingCartComponent } from './ecommerce/shopping-cart/shopping-cart.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {EcommerceService} from "./ecommerce/services/EcommerceService";
 import {HttpClientModule} from "@angular/common/http";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,9 @@ import {HttpClientModule} from "@angular/common/http";
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgbModule,
+    ReactiveFormsModule
   ],
   providers: [EcommerceService],
   bootstrap: [AppComponent]

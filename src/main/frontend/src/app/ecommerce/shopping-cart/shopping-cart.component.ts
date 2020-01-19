@@ -38,10 +38,13 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   loadCart() {
     this.sub = this.ecommerceService.ProductOrderChanged.subscribe(() => {
       let productOrder = this.ecommerceService.SelectedProductOrder;
+
       if (productOrder) {
         this.orders.productOrders.push(new ProductOrder(
-          productOrder.product, productOrder.quantity));
+          productOrder.product, productOrder.quantity, productOrder.size));
       }
+
+      console.log(this.orders.productOrders)
       this.ecommerceService.ProductOrders = this.orders;
       this.orders = this.ecommerceService.ProductOrders;
       this.total = this.calculateTotal(this.orders.productOrders);
@@ -65,7 +68,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   reset() {
     this.orderFinished = false;
     this.orders = new ProductOrders();
-    this.orders.productOrders = []
+    this.orders.productOrders = [];
     this.loadTotal();
     this.total = 0;
   }

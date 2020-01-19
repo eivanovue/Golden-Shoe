@@ -2,10 +2,7 @@ package com.eivanovue.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -18,10 +15,14 @@ public class OrderProduct {
   @Column(nullable = false)
   private Integer quantity;
 
-  public OrderProduct() {
-  }
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "product_size_id")
+  private ProductSize productSize;
 
-  public OrderProduct(Order order, Product product, Integer quantity) {
+  public OrderProduct() {}
+
+  public OrderProduct(Order order, Product product, Integer quantity, ProductSize productSize) {
+    this.productSize = productSize;
     pk = new OrderProductPK();
     pk.setOrder(order);
     pk.setProduct(product);
@@ -60,11 +61,19 @@ public class OrderProduct {
     this.pk = pk;
   }
 
-  private Integer getQuantity() {
+  public Integer getQuantity() {
     return quantity;
   }
 
   public void setQuantity(Integer quantity) {
     this.quantity = quantity;
+  }
+
+  public ProductSize getProductSize() {
+    return productSize;
+  }
+
+  public void setProductSize(ProductSize productSize) {
+    this.productSize = productSize;
   }
 }

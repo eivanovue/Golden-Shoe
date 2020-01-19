@@ -4,6 +4,8 @@ import {Product} from "../models/product.model";
 import {EcommerceService} from "../services/EcommerceService";
 import {Subscription} from "rxjs";
 import {ProductOrders} from "../models/product-orders.model";
+import {ProductSize} from "../models/product-size.model";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-products',
@@ -13,12 +15,18 @@ import {ProductOrders} from "../models/product-orders.model";
 export class ProductsComponent implements OnInit {
   productOrders: ProductOrder[] = [];
   products: Product[] = [];
+  sizeSet = false;
   selectedProductOrder: ProductOrder;
   private shoppingCartOrders: ProductOrders;
   sub: Subscription;
   productSelected: boolean = false;
+  radioGroupForm: FormGroup;
+  private formBuilder: FormBuilder;
 
-  constructor(private ecommerceService: EcommerceService) {}
+
+  constructor(private ecommerceService: EcommerceService, formBuilder: FormBuilder) {
+    this.formBuilder = formBuilder;
+  }
 
   ngOnInit() {
     this.productOrders = [];
@@ -46,6 +54,8 @@ export class ProductsComponent implements OnInit {
     this.ecommerceService.ProductOrders = this.shoppingCartOrders;
     this.shoppingCartOrders = this.ecommerceService.ProductOrders;
     this.productSelected = false;
+    productOrder.size = null;
+    productOrder.quantity = 0;
   }
 
   loadProducts() {
@@ -73,9 +83,24 @@ export class ProductsComponent implements OnInit {
     this.ecommerceService.ProductOrders.productOrders = [];
     this.loadOrders();
     this.productSelected = false;
+    this.radioGroupForm = this.formBuilder.group({
+      'model': ''
+    });
   }
 
   isProductSelected(product: Product): boolean {
     return this.getProductIndex(product) > -1;
+  }
+
+  setProductSize(order: ProductOrder, id: number, size: number, stock: number) {
+    console.log(size + " "
+    + stock);
+    order.size = new ProductSize(id, size, stock);
+    this.sizeSet = true;
+  }
+
+  unsetProductSize(order: ProductOrder) {
+    order.size = null;
+    order.quantity = 0;
   }
 }
