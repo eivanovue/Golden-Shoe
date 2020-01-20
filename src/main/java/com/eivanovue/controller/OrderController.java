@@ -2,6 +2,7 @@ package com.eivanovue.controller;
 
 import com.eivanovue.dto.OrderProductDto;
 import com.eivanovue.enums.OrderStatus;
+import com.eivanovue.model.Delivery;
 import com.eivanovue.model.Order;
 import com.eivanovue.model.OrderProduct;
 import com.eivanovue.service.OrderProductService;
@@ -41,10 +42,12 @@ public class OrderController {
   public ResponseEntity<Order> create(@RequestBody OrderForm form) {
 
     List<OrderProductDto> formDtos = form.getProductOrders();
+    Delivery delivery = form.getDelivery();
     validateProductsExistence(formDtos);
 
     Order order = new Order();
     order.setStatus(OrderStatus.PAID.name());
+    order.setDelivery(delivery);
     // set time of order creation and save to db
     order = this.orderService.create(order);
 
@@ -91,13 +94,19 @@ public class OrderController {
 
   public static class OrderForm {
     private List<OrderProductDto> productOrders;
+    private Delivery delivery;
 
     List<OrderProductDto> getProductOrders() {
       return productOrders;
     }
-
     public void setProductOrders(List<OrderProductDto> productOrders) {
       this.productOrders = productOrders;
+    }
+    public Delivery getDelivery() {
+      return delivery;
+    }
+    public void setDelivery(Delivery delivery) {
+      this.delivery = delivery;
     }
   }
 }

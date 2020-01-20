@@ -1,12 +1,41 @@
 <h2 class="text-center">ORDER</h2>
-<ul>
-  <li *ngFor="let order of orders.productOrders">
-    {{ order.product.name }} - Size: {{order.size.size}} - ${{ order.product.price }} x {{ order.quantity}} pcs.
-  </li>
-</ul>
-<h3 class="text-right">Total amount: ${{ total }}</h3>
+<br>
 
-<button class="btn btn-primary btn-block" (click)="pay()" *ngIf="!paid">Pay</button>
+<table class="table table-dark">
+  <thead>
+  <tr>
+    <th scope="col">Product name</th>
+    <th scope="col">Size</th>
+    <th scope="col">Price</th>
+    <th scope="col">Quantity</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let order of orders.productOrders">
+    <td>{{order.product.name}}</td>
+    <td>{{order.size.size}}</td>
+    <td>{{order.product.price}}</td>
+    <td>{{order.quantity}}</td>
+  </tr>
+  </tbody>
+</table>
+<br *ngIf="!paid">
+<!--<h3 class="text-right">Total amount: ${{ total | number: 0}}</h3>-->
+
+<select  class="form-control" id="selector-delivery" *ngIf="!paid">
+  <option (click)="unsetDelivery()" selected>Select delivery...</option>
+  <option (click)="setDelivery(delivery.id, delivery.name, delivery.days)" *ngFor="let delivery of delivery">{{delivery.name}}</option>
+</select>
+<br *ngIf="checkDeliverySet() && !paid">
+<div class="alert alert-info" role="alert" *ngIf="checkDeliverySet() && !paid">
+  <strong>Delivery information:</strong> Your order will arrive in <strong> {{orders.delivery.days}} day(s) </strong>
+</div>
+<br>
+
+<button class="btn btn-primary btn-block" (click)="pay()" *ngIf="!paid && checkDeliverySet()">Pay</button>
 <div class="alert alert-success" role="alert" *ngIf="paid">
   <strong>Congratulation!</strong> You successfully made the order.
+  <strong>Delivery information:</strong> Your order will arrive in {{orders.delivery.days}} day(s)
 </div>
+<hr>
+<h2>Total amount <span class="badge badge-secondary">${{ total | number: 0}}</span></h2>

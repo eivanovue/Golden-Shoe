@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ProductOrders} from "../models/product-orders.model";
 import {Subscription} from "rxjs";
 import {EcommerceService} from "../services/EcommerceService";
+import {Delivery} from "../models/delivery.model";
 
 @Component({
   selector: 'app-orders',
@@ -11,6 +12,7 @@ import {EcommerceService} from "../services/EcommerceService";
 export class OrdersComponent implements OnInit {
   orders: ProductOrders;
   total: number;
+  delivery: Delivery[] = [];
   paid: boolean;
   sub: Subscription;
 
@@ -24,11 +26,11 @@ export class OrdersComponent implements OnInit {
       this.orders = this.ecommerceService.ProductOrders;
     });
     this.loadTotal();
+    this.loadDelivery();
   }
 
   pay() {
     this.paid = true;
-    console.log(this.orders);
     this.ecommerceService.saveOrder(this.orders).subscribe();
   }
 
@@ -37,4 +39,28 @@ export class OrdersComponent implements OnInit {
       this.total = this.ecommerceService.Total;
     });
   }
+
+  loadDelivery() {
+    this.ecommerceService.getAllDeliveries().subscribe((delivery: any[]) => {
+        delivery.forEach(item => {
+          this.delivery.push(item);
+        })
+      },
+      (error) => console.log(error)
+    );
+    console.log(this.delivery)
+  }
+
+  checkDeliverySet() {
+    return !!this.orders.delivery;
+  }
+
+  setDelivery(id: number, name: string, days: number) {
+    this.orders.delivery = new Delivery(id, name, days);
+  }
+
+  unsetDelivery() {
+    this.orders.delivery = null;
+  }
+
 }

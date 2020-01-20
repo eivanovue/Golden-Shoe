@@ -27,6 +27,10 @@ public class Order {
   @Valid
   private List<OrderProduct> orderProducts = new ArrayList<>();
 
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "delivery_id")
+  private Delivery delivery;
+
   @Transient
   public Double getTotalOrderPrice() {
     double sum = 0D;
@@ -72,5 +76,13 @@ public class Order {
 
   public void setOrderProducts(List<OrderProduct> orderProducts) {
     this.orderProducts = orderProducts;
+  }
+
+  public Delivery getDelivery() {
+    return delivery;
+  }
+
+  public void setDelivery(Delivery delivery) {
+    this.delivery = delivery;
   }
 }

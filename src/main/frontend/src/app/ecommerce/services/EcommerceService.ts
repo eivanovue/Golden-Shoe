@@ -7,7 +7,8 @@ import {HttpClient} from "@angular/common/http";
 @Injectable()
 export class EcommerceService {
   private productsUrl = "/api/products";
-  private ordersUrl = "/api/orders"
+  private ordersUrl = "/api/orders";
+  private deliveriesUrl = "/api/deliveries";
 
   private productOrder: ProductOrder;
   private orders: ProductOrders = new ProductOrders();
@@ -30,6 +31,10 @@ export class EcommerceService {
 
   saveOrder(order: ProductOrders) {
     return this.http.post(this.ordersUrl, order);
+  }
+
+  getAllDeliveries() {
+    return this.http.get(this.deliveriesUrl);
   }
 
   set SelectedProductOrder(value: ProductOrder) {

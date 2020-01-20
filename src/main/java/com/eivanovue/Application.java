@@ -1,7 +1,9 @@
 package com.eivanovue;
 
+import com.eivanovue.model.Delivery;
 import com.eivanovue.model.Product;
 import com.eivanovue.model.ProductSize;
+import com.eivanovue.service.DeliveryService;
 import com.eivanovue.service.ProductService;
 import com.eivanovue.service.ProductSizeService;
 import org.springframework.boot.CommandLineRunner;
@@ -20,8 +22,17 @@ public class Application {
 	}
 
 	@Bean
-	CommandLineRunner runner(ProductService productService, ProductSizeService productSizeService) {
+	CommandLineRunner runner(ProductService productService, ProductSizeService productSizeService, DeliveryService deliveryService) {
 		return args -> {
+
+			Delivery delivery1 = new Delivery("Standard Delivery", 5);
+			Delivery delivery2 = new Delivery("Fast Delivery", 2);
+			Delivery delivery3 = new Delivery("Express Delivery", 1);
+			deliveryService.save(delivery1);
+			deliveryService.save(delivery2);
+			deliveryService.save(delivery3);
+
+
 			Product prod1 = new Product("Smarties Luchen", 74.99, 15, "https://www.samuel-windsor.co.uk/images/products/zoom/z-F-BV3.jpg");
 			ProductSize prod1size11 = new ProductSize(11, 10);
 			ProductSize prod1size10 = new ProductSize(10, 12);

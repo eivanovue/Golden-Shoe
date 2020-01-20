@@ -1,5 +1,5 @@
 <div class="row card-deck">
-  <div class="col-lg-4 col-md-6 mb-4" *ngFor="let order of productOrders">
+  <div class="col-lg-6 col-md-6 mb-4" *ngFor="let order of productOrders">
     <div class="card text-center">
       <div class="card-header">
         <h4>{{order.product.name}}</h4>
@@ -14,8 +14,7 @@
             <option (click)="this.unsetProductSize(order)" selected>Select size...</option>
             <option  (click)="this.setProductSize(order, size.id, size.size, size.stock)" *ngFor="let size of order.product.productSize">{{size.size}}</option>
           </select>
-          <hr>
-          <div *ngIf="order.size"> <p class="stock">Items available: {{order.size.stock}}</p></div>
+          <div *ngIf="order.size"><hr> <p class="stock">Items available: {{order.size.stock}}</p></div>
         </div>
         <div class="row justify-content-center">
           <div class="col-4 padding-0" *ngIf="!isProductSelected(order.product) && order.size">
