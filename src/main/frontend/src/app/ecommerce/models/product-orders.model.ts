@@ -3,5 +3,7 @@ import {Delivery} from "./delivery.model";
 
 export class ProductOrders {
   productOrders: ProductOrder[] = [];
-  delivery: Delivery;
+  delivery: Delivery = null;
+
+
 }

@@ -9,12 +9,15 @@
         <h5 class="card-title">
           ${{order.product.price}}
         </h5>
+
         <div *ngIf="!isProductSelected(order.product)">
-          <select  class="form-control" id="sel {{order.product.id}}">
-            <option (click)="this.unsetProductSize(order)" selected>Select size...</option>
-            <option  (click)="this.setProductSize(order, size.id, size.size, size.stock)" *ngFor="let size of order.product.productSize">{{size.size}}</option>
+          <select [(ngModel)]="order.size" (ngModelChange)="order.setProductSize()" class="form-control" id="sel {{order.product.id}}">
+            <option [ngValue]="null" selected="selected">Select size...</option>
+            <option [ngValue]="size" *ngFor="let size of order.product.productSize">
+              {{size.size}}
+            </option>
           </select>
-          <div *ngIf="order.size"><hr> <p class="stock">Items available: {{order.size.stock}}</p></div>
+          <div *ngIf="order.size"><hr><p class="stock">Items available: {{order.size.stock}}</p></div>
         </div>
         <div class="row justify-content-center">
           <div class="col-4 padding-0" *ngIf="!isProductSelected(order.product) && order.size">

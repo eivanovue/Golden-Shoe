@@ -4,8 +4,6 @@ import {Product} from "../models/product.model";
 import {EcommerceService} from "../services/EcommerceService";
 import {Subscription} from "rxjs";
 import {ProductOrders} from "../models/product-orders.model";
-import {ProductSize} from "../models/product-size.model";
-import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-products',
@@ -20,12 +18,8 @@ export class ProductsComponent implements OnInit {
   private shoppingCartOrders: ProductOrders;
   sub: Subscription;
   productSelected: boolean = false;
-  radioGroupForm: FormGroup;
-  private formBuilder: FormBuilder;
 
-
-  constructor(private ecommerceService: EcommerceService, formBuilder: FormBuilder) {
-    this.formBuilder = formBuilder;
+  constructor(private ecommerceService: EcommerceService) {
   }
 
   ngOnInit() {
@@ -83,24 +77,9 @@ export class ProductsComponent implements OnInit {
     this.ecommerceService.ProductOrders.productOrders = [];
     this.loadOrders();
     this.productSelected = false;
-    this.radioGroupForm = this.formBuilder.group({
-      'model': ''
-    });
   }
 
   isProductSelected(product: Product): boolean {
     return this.getProductIndex(product) > -1;
-  }
-
-  setProductSize(order: ProductOrder, id: number, size: number, stock: number) {
-    console.log(size + " "
-    + stock);
-    order.size = new ProductSize(id, size, stock);
-    this.sizeSet = true;
-  }
-
-  unsetProductSize(order: ProductOrder) {
-    order.size = null;
-    order.quantity = 0;
   }
 }

@@ -3,7 +3,7 @@ import {ProductSize} from "./product-size.model";
 
 export class ProductOrder {
   product: Product;
-  private productSize: ProductSize;
+  productSize: ProductSize = null;
   quantity: number;
 
   constructor(product: Product, quantity: number, productSize?: ProductSize) {
@@ -20,5 +20,13 @@ export class ProductOrder {
 
   set size(value: ProductSize) {
     this.productSize = value;
+  }
+
+  setProductSize() {
+    if (this.productSize) {
+      this.size = this.productSize;
+    } else {
+      this.size = this.productSize
+    }
   }
 }

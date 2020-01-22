@@ -13,6 +13,7 @@ export class OrdersComponent implements OnInit {
   orders: ProductOrders;
   total: number;
   delivery: Delivery[] = [];
+  selectedDelivery: Delivery = null;
   paid: boolean;
   sub: Subscription;
 
@@ -55,12 +56,12 @@ export class OrdersComponent implements OnInit {
     return !!this.orders.delivery;
   }
 
-  setDelivery(id: number, name: string, days: number) {
-    this.orders.delivery = new Delivery(id, name, days);
-  }
-
-  unsetDelivery() {
-    this.orders.delivery = null;
+  setDelivery() {
+    if (this.selectedDelivery) {
+      this.orders.delivery = this.selectedDelivery;
+    } else {
+      this.orders.delivery = this.selectedDelivery;
+    }
   }
 
 }
