@@ -34,6 +34,7 @@ export class EcommerceComponent implements OnInit {
     this.productsC.reset();
     this.shoppingCartC.reset();
     this.ordersC.paid = false;
+    this.ordersC.reset();
   }
 
   ngOnInit(): void {

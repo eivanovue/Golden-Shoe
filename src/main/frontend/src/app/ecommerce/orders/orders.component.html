@@ -1,4 +1,4 @@
-<h2 class="text-center">ORDER</h2>
+<h1 class="text-center">ORDER DETAILS</h1>
 <br>
 
 <table class="table table-dark">
@@ -20,10 +20,59 @@
   </tbody>
 </table>
 <br *ngIf="!paid">
+<h2>Customer information</h2>
+<hr>
+<form [formGroup]="userForm" novalidate>
+  <div formGroupName="user">
+    <div class="form-group">
+      <label for="inputName">Full name</label>
+      <input formControlName="name" type="text" class="form-control" id="inputName" placeholder="Emil Ivanov">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputEmail">Email</label>
+        <input formControlName="email" type="text" class="form-control" id="inputEmail">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputTelephone">Telephone</label>
+        <input formControlName="telephone" type="text" class="form-control" id="inputTelephone">
+      </div>
+    </div>
+  </div>
+</form>
+<h2>Shipping address</h2>
+<hr>
+<form [formGroup]="addressForm" novalidate>
+  <div formGroupName="address">
+    <div class="form-group">
+      <label for="inputAddress">Address</label>
+      <input formControlName="street" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputCity">City</label>
+        <input formControlName="city" type="text" class="form-control" id="inputCity">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="inputCountry">Country</label>
+        <select formControlName="country" id="inputCountry" class="form-control">
+          <option selected="selected">Choose...</option>
+          <option>United Kingdom</option>
+        </select>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Post code</label>
+        <input formControlName="postCode" type="text" class="form-control" id="inputZip">
+      </div>
+    </div>
+  </div>
+</form>
+<h2>Delivery information</h2>
+<hr>
 <select [(ngModel)]="selectedDelivery" (ngModelChange)="setDelivery()" class="form-control">
-  <option [ngValue]="null" selected="selected">Select size...</option>
+  <option [ngValue]="null" selected="selected">Select delivery...</option>
   <option [ngValue]="delivery" *ngFor="let delivery of delivery">
-    {{delivery.name}}
+    {{delivery.name}} - <strong>${{delivery.price}}</strong>
   </option>
 </select>
 <br *ngIf="checkDeliverySet() && !paid">

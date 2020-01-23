@@ -3,6 +3,8 @@ import {ProductOrders} from "../models/product-orders.model";
 import {Subscription} from "rxjs";
 import {EcommerceService} from "../services/EcommerceService";
 import {Delivery} from "../models/delivery.model";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Address} from "../models/address.model";
 
 @Component({
   selector: 'app-orders',
@@ -16,9 +18,27 @@ export class OrdersComponent implements OnInit {
   selectedDelivery: Delivery = null;
   paid: boolean;
   sub: Subscription;
+  addressForm: FormGroup;
+  userForm: FormGroup;
+  public events: any[] = []; // use later to display form changes
 
-  constructor(private ecommerceService: EcommerceService) {
+  constructor(private ecommerceService: EcommerceService, private _fb: FormBuilder) {
     this.orders = this.ecommerceService.ProductOrders;
+    this.addressForm = this._fb.group({
+      address: this._fb.group({
+        street: [''],
+        city: [''],
+        country: ['Choose...'],
+        postCode: ['']
+      })
+    });
+    this.userForm = this._fb.group({
+      user: this._fb.group({
+        name: [''],
+        email: [''],
+        telephone: ['']
+      })
+    });
   }
 
   ngOnInit() {
@@ -28,10 +48,14 @@ export class OrdersComponent implements OnInit {
     });
     this.loadTotal();
     this.loadDelivery();
+    // subscribe to form changes
+    this.subcribeToFormChanges();
   }
 
   pay() {
     this.paid = true;
+    this.orders.address = this.addressForm.value.address;
+    this.orders.user = this.userForm.value.user;
     this.ecommerceService.saveOrder(this.orders).subscribe();
   }
 
@@ -49,7 +73,6 @@ export class OrdersComponent implements OnInit {
       },
       (error) => console.log(error)
     );
-    console.log(this.delivery)
   }
 
   checkDeliverySet() {
@@ -59,9 +82,34 @@ export class OrdersComponent implements OnInit {
   setDelivery() {
     if (this.selectedDelivery) {
       this.orders.delivery = this.selectedDelivery;
+      this.total = this.ecommerceService.Total;
+      this.total = this.total + this.selectedDelivery.price;
     } else {
       this.orders.delivery = this.selectedDelivery;
+      this.total = this.ecommerceService.Total;
     }
   }
 
+  subcribeToFormChanges() {
+    // initialize stream
+    const addressFormValueChanges$ = this.addressForm.valueChanges;
+    const userFormValueChanges$ = this.userForm.valueChanges;
+
+    // subscribe to the stream
+    addressFormValueChanges$.subscribe(x => this.events
+      .push({ event: 'STATUS CHANGED', object: x }));
+
+    userFormValueChanges$.subscribe(x => this.events
+      .push({ event: 'STATUS CHANGED', object: x }));
+  }
+
+  test(){
+    console.log(console.log('reactiveForm' , this.addressForm.value));
+  }
+
+  reset() {
+    this.addressForm.reset();
+    this.userForm.reset();
+    this.selectedDelivery = null;
+  }
 }

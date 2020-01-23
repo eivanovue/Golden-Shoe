@@ -8,4 +8,6 @@ public interface OrderService {
   Order create(Order order);
 
   void update(Order order);
+
+  String generateReference(Order order);
 }

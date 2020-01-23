@@ -19,11 +19,14 @@ public class Delivery {
   @NotNull(message = "Days for delivery are required.")
   private int days;
 
+  private double price;
+
   public Delivery() {}
 
-  public Delivery(@NotNull(message = "Delivery name is required.") String name, @NotNull(message = "Days for delivery are required.") int days) {
+  public Delivery(@NotNull(message = "Delivery name is required.") String name, @NotNull(message = "Days for delivery are required.") int days, double price) {
     this.name = name;
     this.days = days;
+    this.price = price;
   }
 
   public long getId() {
@@ -48,5 +51,13 @@ public class Delivery {
 
   public void setDays(int days) {
     this.days = days;
+  }
+
+  public double getPrice() {
+    return price;
+  }
+
+  public void setPrice(double price) {
+    this.price = price;
   }
 }

@@ -2,9 +2,8 @@ package com.eivanovue.controller;
 
 import com.eivanovue.dto.OrderProductDto;
 import com.eivanovue.enums.OrderStatus;
-import com.eivanovue.model.Delivery;
-import com.eivanovue.model.Order;
-import com.eivanovue.model.OrderProduct;
+import com.eivanovue.model.*;
+import com.eivanovue.service.EmailService;
 import com.eivanovue.service.OrderProductService;
 import com.eivanovue.service.OrderService;
 import com.eivanovue.service.ProductService;
@@ -31,11 +30,13 @@ public class OrderController {
   private final ProductService productService;
   private final OrderService orderService;
   private final OrderProductService orderProductService;
+  private final EmailService emailService;
 
-  public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService) {
+  public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService, EmailService emailService) {
     this.productService = productService;
     this.orderService = orderService;
     this.orderProductService = orderProductService;
+    this.emailService = emailService;
   }
 
   @PostMapping
@@ -43,14 +44,23 @@ public class OrderController {
 
     List<OrderProductDto> formDtos = form.getProductOrders();
     Delivery delivery = form.getDelivery();
+    Address address = form.getAddress();
+    User user = form.getUser();
+
+    //check product exist in db
     validateProductsExistence(formDtos);
 
     Order order = new Order();
     order.setStatus(OrderStatus.PAID.name());
     order.setDelivery(delivery);
+    order.setAddress(address);
+    order.setUser(user);
+    String reference = orderService.generateReference(order);
+    order.setReference(reference);
     // set time of order creation and save to db
     order = this.orderService.create(order);
 
+    sendEmailConfirmation(order);
     List<OrderProduct> orderProducts = new ArrayList<>();
     for(OrderProductDto dto : formDtos){
       orderProducts.add(orderProductService.create(new OrderProduct(order, productService.getProduct(dto
@@ -75,6 +85,22 @@ public class OrderController {
 
   }
 
+  private void sendEmailConfirmation(Order order) {
+     String to = order.getUser().getEmail();
+     String subject = "Your order - " + order.getReference();
+     String message =
+         "Dear " + order.getUser().getName() + ",\n" +
+         "\n" +
+         "Thank you for shopping with us! Your order with Golden Shoe has been confirmed. You can find the order reference bellow."
+         + "\n" + "\n" +
+         "Order reference: " + order.getReference()
+         + "\n" + "\n" +
+         "Kind regards" + ",\n" +
+         "Golden Shoe Team";
+
+     emailService.sendSimpleMessage(to, subject, message);
+  }
+
   private void validateProductsExistence(List<OrderProductDto> orderProducts) {
     List<OrderProductDto> list = orderProducts
       .stream()
@@ -95,6 +121,8 @@ public class OrderController {
   public static class OrderForm {
     private List<OrderProductDto> productOrders;
     private Delivery delivery;
+    private Address address;
+    private User user;
 
     List<OrderProductDto> getProductOrders() {
       return productOrders;
@@ -108,6 +136,14 @@ public class OrderController {
     public void setDelivery(Delivery delivery) {
       this.delivery = delivery;
     }
+    public Address getAddress() {
+      return address;
+    }
+    public void setAddress(Address address) {
+      this.address = address;
+    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
   }
 }
 

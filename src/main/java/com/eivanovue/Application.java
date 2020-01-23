@@ -25,9 +25,9 @@ public class Application {
 	CommandLineRunner runner(ProductService productService, ProductSizeService productSizeService, DeliveryService deliveryService) {
 		return args -> {
 
-			Delivery delivery1 = new Delivery("Standard Delivery", 5);
-			Delivery delivery2 = new Delivery("Fast Delivery", 2);
-			Delivery delivery3 = new Delivery("Express Delivery", 1);
+			Delivery delivery1 = new Delivery("Standard Delivery", 5, 0);
+			Delivery delivery2 = new Delivery("Fast Delivery", 2, 2.99);
+			Delivery delivery3 = new Delivery("Express Delivery", 1, 4.99);
 			deliveryService.save(delivery1);
 			deliveryService.save(delivery2);
 			deliveryService.save(delivery3);

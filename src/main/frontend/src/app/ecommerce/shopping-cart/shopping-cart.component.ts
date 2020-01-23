@@ -44,7 +44,6 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
           productOrder.product, productOrder.quantity, productOrder.size));
       }
 
-      console.log(this.orders.productOrders)
       this.ecommerceService.ProductOrders = this.orders;
       this.orders = this.ecommerceService.ProductOrders;
       this.total = this.calculateTotal(this.orders.productOrders);

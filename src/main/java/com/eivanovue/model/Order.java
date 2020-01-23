@@ -17,6 +17,8 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
+  private String reference;
+
   @JsonFormat(pattern = "dd/MM/yyyy")
   private LocalDateTime dateCreated;
 
@@ -30,6 +32,12 @@ public class Order {
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "delivery_id")
   private Delivery delivery;
+
+  @Embedded
+  private Address address;
+
+  @Embedded
+  private User user;
 
   @Transient
   public Double getTotalOrderPrice() {
@@ -84,5 +92,29 @@ public class Order {
 
   public void setDelivery(Delivery delivery) {
     this.delivery = delivery;
+  }
+
+  public Address getAddress() {
+    return address;
+  }
+
+  public void setAddress(Address address) {
+    this.address = address;
+  }
+
+  public String getReference() {
+    return reference;
+  }
+
+  public void setReference(String reference) {
+    this.reference = reference;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 }
