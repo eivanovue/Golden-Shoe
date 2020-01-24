@@ -3,7 +3,7 @@ import {ProductOrders} from "../models/product-orders.model";
 import {Subscription} from "rxjs";
 import {EcommerceService} from "../services/EcommerceService";
 import {Delivery} from "../models/delivery.model";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Address} from "../models/address.model";
 
 @Component({
@@ -26,19 +26,20 @@ export class OrdersComponent implements OnInit {
     this.orders = this.ecommerceService.ProductOrders;
     this.addressForm = this._fb.group({
       address: this._fb.group({
-        street: [''],
-        city: [''],
-        country: ['Choose...'],
-        postCode: ['']
+        street: ['', Validators.required],
+        city: ['', Validators.required],
+        country: ['Choose...', Validators.required],
+        postCode: ['', Validators.required]
       })
     });
     this.userForm = this._fb.group({
-      user: this._fb.group({
-        name: [''],
-        email: [''],
-        telephone: ['']
-      })
-    });
+        name: ['', Validators.required],
+        email: ['', [
+          Validators.required,
+          Validators.email
+        ]],
+        telephone: ['', Validators.required]
+      });
   }
 
   ngOnInit() {
@@ -103,9 +104,8 @@ export class OrdersComponent implements OnInit {
       .push({ event: 'STATUS CHANGED', object: x }));
   }
 
-  test(){
-    console.log(console.log('reactiveForm' , this.addressForm.value));
-  }
+  get user(){return this.userForm.controls;}
+  get address(){return this.addressForm.controls;}
 
   reset() {
     this.addressForm.reset();

@@ -46,7 +46,64 @@ public class Order {
     for(OrderProduct op : orderProducts) {
       sum += op.getTotalPrice();
     }
-    return sum;
+    return sum + getDelivery().getPrice();
+  }
+
+  @Transient
+  public String getStringifiedOrder(){
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("Product List").append("\n");
+    sb.append("--------------------------------------------------------------------------------------------------------------------------").append("\n");
+    getOrderProducts().forEach(item -> {
+      sb.append(item.getPk().getProduct().getName())
+        .append(" - Size: ")
+        .append(item.getProductSize().getSize())
+        .append(" - Quantity: ")
+        .append(item.getQuantity())
+        .append(" - Price: $")
+        .append(item.getPk().getProduct().getPrice())
+        .append("\n");
+    });
+    sb.append("\n");
+
+    sb.append("Customer Information").append("\n");
+    sb.append("--------------------------------------------------------------------------------------------------------------------------").append("\n");
+    sb.append("Name: ")
+      .append(getUser().getName()).append("\n");
+    sb.append("Telephone: ")
+      .append(getUser().getTelephone()).append("\n");
+    sb.append("Email: ")
+      .append(getUser().getEmail()).append("\n");
+    sb.append("Shipping address: ")
+      .append(getAddress().getStreet())
+      .append(", ")
+      .append(getAddress().getCity())
+      .append(", ")
+      .append(getAddress().getCountry())
+      .append(", ")
+      .append(getAddress().getPostCode())
+      .append("\n");
+    sb.append("\n");
+
+    sb.append("Delivery Information").append("\n");
+    sb.append("--------------------------------------------------------------------------------------------------------------------------").append("\n");
+    sb.append(getDelivery().getName())
+      .append(" - ")
+      .append(getDelivery().getDays())
+      .append(" day(s) $")
+      .append(getDelivery().getPrice())
+      .append("\n");
+    sb.append("\n");
+
+    sb.append("Total Amount Paid").append("\n");
+    sb.append("--------------------------------------------------------------------------------------------------------------------------").append("\n");
+    sb.append("$")
+      .append(getTotalOrderPrice())
+      .append("\n");
+    sb.append("\n");
+
+    return sb.toString();
   }
 
   @Transient

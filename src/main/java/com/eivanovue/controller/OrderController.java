@@ -60,7 +60,6 @@ public class OrderController {
     // set time of order creation and save to db
     order = this.orderService.create(order);
 
-    sendEmailConfirmation(order);
     List<OrderProduct> orderProducts = new ArrayList<>();
     for(OrderProductDto dto : formDtos){
       orderProducts.add(orderProductService.create(new OrderProduct(order, productService.getProduct(dto
@@ -72,7 +71,7 @@ public class OrderController {
     this.orderService.update(order);
 
     calculateStocks(orderProducts);
-
+    sendEmailConfirmation(order);
     String uri = ServletUriComponentsBuilder
       .fromCurrentServletMapping()
       .path("/orders/{id}")
@@ -91,10 +90,13 @@ public class OrderController {
      String message =
          "Dear " + order.getUser().getName() + ",\n" +
          "\n" +
-         "Thank you for shopping with us! Your order with Golden Shoe has been confirmed. You can find the order reference bellow."
+         "Thank you for shopping with us! Your order with Golden Shoe has been confirmed and will arrive in" +
+           + order.getDelivery().getDays() + " day(s). You can find the order information bellow."
          + "\n" + "\n" +
-         "Order reference: " + order.getReference()
-         + "\n" + "\n" +
+         "Order reference: " + order.getReference() + "\n" + "\n" +
+
+           order.getStringifiedOrder() + "\n" +
+
          "Kind regards" + ",\n" +
          "Golden Shoe Team";
 

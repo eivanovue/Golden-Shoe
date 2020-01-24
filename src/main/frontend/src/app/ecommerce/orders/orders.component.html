@@ -22,23 +22,23 @@
 <br *ngIf="!paid">
 <h2>Customer information</h2>
 <hr>
-<form [formGroup]="userForm" novalidate>
-  <div formGroupName="user">
+<form [formGroup]="userForm">
+
     <div class="form-group">
       <label for="inputName">Full name</label>
-      <input formControlName="name" type="text" class="form-control" id="inputName" placeholder="Emil Ivanov">
+      <input formControlName="name" type="text" class="form-control" id="inputName">
     </div>
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail">Email</label>
         <input formControlName="email" type="text" class="form-control" id="inputEmail">
+        <div class="alert alert-danger" *ngIf="(user.email.dirty || user.email.touched) && user.email.invalid">Email is required.</div>
       </div>
       <div class="form-group col-md-6">
         <label for="inputTelephone">Telephone</label>
         <input formControlName="telephone" type="text" class="form-control" id="inputTelephone">
       </div>
     </div>
-  </div>
 </form>
 <h2>Shipping address</h2>
 <hr>
