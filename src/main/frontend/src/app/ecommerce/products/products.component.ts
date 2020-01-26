@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ProductOrder} from "../models/product-order.model";
 import {Product} from "../models/product.model";
 import {EcommerceService} from "../services/EcommerceService";
 import {Subscription} from "rxjs";
 import {ProductOrders} from "../models/product-orders.model";
+import {SortingService} from "../services/SortingService";
+import {FiltersComponent} from "./filters/filters.component";
+
 
 @Component({
   selector: 'app-products',
@@ -12,15 +15,20 @@ import {ProductOrders} from "../models/product-orders.model";
 })
 export class ProductsComponent implements OnInit {
   productOrders: ProductOrder[] = [];
+  filteredProductOrders: ProductOrder[] = [];
   products: Product[] = [];
   sizeSet = false;
   selectedProductOrder: ProductOrder;
   private shoppingCartOrders: ProductOrders;
   sub: Subscription;
   productSelected: boolean = false;
+  p: number = 1;
+  private sortingId: number;
 
-  constructor(private ecommerceService: EcommerceService) {
-  }
+  @ViewChild('filter', {static: false})
+  filter: FiltersComponent;
+
+  constructor(private ecommerceService: EcommerceService, private sortingService: SortingService) {}
 
   ngOnInit() {
     this.productOrders = [];
@@ -58,11 +66,13 @@ export class ProductsComponent implements OnInit {
         (products: any[]) => {
           this.products = products;
           this.products.forEach(product => {
+            // this.filteredProductOrders.push(new ProductOrder(product, 0));
             this.productOrders.push(new ProductOrder(product, 0));
           })
         },
         (error) => console.log(error)
       );
+
   }
 
   loadOrders() {
@@ -74,6 +84,7 @@ export class ProductsComponent implements OnInit {
   reset() {
     this.productOrders = [];
     this.loadProducts();
+    this.filteredProductOrders = this.productOrders;
     this.ecommerceService.ProductOrders.productOrders = [];
     this.loadOrders();
     this.productSelected = false;
@@ -81,5 +92,43 @@ export class ProductsComponent implements OnInit {
 
   isProductSelected(product: Product): boolean {
     return this.getProductIndex(product) > -1;
+  }
+
+  decrementQuantity(order) {
+    if(order.quantity != 0){
+      order.quantity--;
+    }
+  }
+
+  incrementQuantity(order) {
+      order.quantity++;
+  }
+
+  onSort(sortingEvent) {
+    this.sortingId = sortingEvent;
+    SortingService.sortDecider(this.filteredProductOrders, this.sortingId);
+  }
+
+  onFilter(checkedValues) {
+    if (checkedValues.length) {
+      this.filterProducts(checkedValues);
+    } else {
+      this.filteredProductOrders = this.productOrders;
+    }
+  }
+
+  filterProducts(checkedValues) {
+    let filtered = this.filteredProductOrders = this.productOrders
+      .filter(product => {
+        let arr = Object.values(product.product.productType);
+        return arr
+          .map(p => p)
+          .find(name => {
+            return checkedValues.find(c => c === name);
+          });
+      });
+
+    SortingService.sortDecider(filtered, this.sortingId);
+    this.filteredProductOrders = filtered;
   }
 }

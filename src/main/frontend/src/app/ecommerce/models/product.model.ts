@@ -1,4 +1,5 @@
 import {ProductSize} from "./product-size.model";
+import {ProductType} from "./product-type.model";
 
 export class Product {
   id: number;
@@ -6,6 +7,7 @@ export class Product {
   price: number;
   stock: number;
   productSize: ProductSize[];
+  productType: ProductType[];
   pictureUrl: string;
 
   constructor(id: number, name: string, price: number, stock: number, productSize: ProductSize[], pictureUrl: string) {

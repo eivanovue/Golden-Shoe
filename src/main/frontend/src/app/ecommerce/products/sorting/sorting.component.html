@@ -1,0 +1,8 @@
+<div class="row justify-content-center">
+  <div *ngFor="let sort of sorting; let i = index;">
+    <p>
+      <button style="margin-right: 4px;" class="btn btn-outline-dark" (click)="onSort(i)">{{sort.name}}</button>
+    </p>
+  </div>
+
+</div>

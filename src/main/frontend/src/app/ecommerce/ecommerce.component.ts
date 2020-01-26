@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from "@angular/core";
 import {ProductsComponent} from "./products/products.component";
 import {ShoppingCartComponent} from "./shopping-cart/shopping-cart.component";
 import {OrdersComponent} from "./orders/orders.component";
+import {FiltersComponent} from "./products/filters/filters.component";
 
 @Component({
   selector: 'app-ecommerce',
@@ -35,6 +36,10 @@ export class EcommerceComponent implements OnInit {
     this.shoppingCartC.reset();
     this.ordersC.paid = false;
     this.ordersC.reset();
+  }
+
+  shoppingCartEmpty(): boolean {
+    return this.shoppingCartC.orders.productOrders.length == 0;
   }
 
   ngOnInit(): void {

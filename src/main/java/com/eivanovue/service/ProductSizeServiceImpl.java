@@ -1,11 +1,11 @@
 package com.eivanovue.service;
 
-import com.eivanovue.model.ProductSize;
-import com.eivanovue.repository.ProductSizeRepository;
-import org.apache.velocity.exception.ResourceNotFoundException;
-import org.springframework.stereotype.Service;
+  import com.eivanovue.model.ProductSize;
+  import com.eivanovue.repository.ProductSizeRepository;
+  import org.apache.velocity.exception.ResourceNotFoundException;
+  import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+  import javax.transaction.Transactional;
 
 @Service
 @Transactional

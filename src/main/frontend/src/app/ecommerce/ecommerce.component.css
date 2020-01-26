@@ -1,3 +1,11 @@
 .row-top-margin {
-  margin-top: 100px;
+  margin-top: 50px;
+}
+
+.navbar {
+  background-color: #6a0001 !important;
+}
+
+.pagination /deep/ .ngx-pagination .current {
+  background: #6a0001;
 }

@@ -1,6 +1,5 @@
 package com.eivanovue.model;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -19,23 +18,30 @@ public class Product {
 
   private double price;
 
-  @NotNull(message = "Product stock is required.")
-  private long stock;
-
   @NotNull(message = "Product size is required.")
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_size_id")
   private List<ProductSize> productSize = new ArrayList<>();
+
+  @NotNull(message = "Product type is required.")
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_type_id")
+  private ProductType productType;
 
   private String pictureUrl;
 
   public Product() {
   }
 
-  public Product(@NotNull(message = "Product name is required.") String name, double price, long stock, String pictureUrl) {
+  public Product(@NotNull(message = "Product name is required.") String name,
+                 double price,
+                 List<ProductSize> productSize,
+                 ProductType productType,
+                 String pictureUrl) {
     this.name = name;
     this.price = price;
-    this.stock = stock;
+    this.productSize = productSize;
+    this.productType = productType;
     this.pictureUrl = pictureUrl;
   }
 
@@ -63,14 +69,6 @@ public class Product {
     this.price = price;
   }
 
-  public long getStock() {
-    return stock;
-  }
-
-  public void setStock(long stock) {
-    this.stock = stock;
-  }
-
   public List<ProductSize> getProductSize() {
     return productSize;
   }
@@ -87,5 +85,11 @@ public class Product {
     this.pictureUrl = pictureUrl;
   }
 
+  public ProductType getProductType() {
+    return productType;
+  }
 
+  public void setProductType(ProductType productType) {
+    this.productType = productType;
+  }
 }

@@ -1,0 +1,12 @@
+<div class="row no-margin">
+<div class="col-lg-3 col-md-2" *ngFor="let option of options;">
+  <label>
+    <input type="checkbox"
+           name="options"
+           value="{{option.value}}"
+           [(ngModel)]="option.checked"
+           (change)="onFilter()"/>
+    {{option.name}}
+  </label>
+</div>
+</div>
