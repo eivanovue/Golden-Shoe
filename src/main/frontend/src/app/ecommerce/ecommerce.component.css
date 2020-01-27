@@ -3,9 +3,18 @@
 }
 
 .navbar {
-  background-color: #6a0001 !important;
+  background-color: #161616 !important;
+  color: #f0f3f6;
 }
 
 .pagination /deep/ .ngx-pagination .current {
-  background: #6a0001;
+  background: #161616;
+}
+
+.no-margin{
+  margin: 0;
+}
+
+.image-mens{
+  background-image: url("https://eivanovue.com/shoes/images/mens/image-mens.jpg");
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {ProductOrder} from "../models/product-order.model";
 import {Product} from "../models/product.model";
 import {EcommerceService} from "../services/EcommerceService";
@@ -25,10 +25,12 @@ export class ProductsComponent implements OnInit {
   p: number = 1;
   private sortingId: number;
 
-  @ViewChild('filter', {static: false})
-  filter: FiltersComponent;
 
-  constructor(private ecommerceService: EcommerceService, private sortingService: SortingService) {}
+  @Output() showProducts: EventEmitter<boolean>;
+
+  constructor(private ecommerceService: EcommerceService, private sortingService: SortingService) {
+    this.showProducts = new EventEmitter<boolean>();
+  }
 
   ngOnInit() {
     this.productOrders = [];

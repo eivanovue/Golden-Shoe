@@ -1,23 +1,56 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-  <div class="container">
-    <a class="navbar-brand" href="#">Golden Shoe</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarResponsive" aria-controls="navbarResponsive"
-            aria-expanded="false" aria-label="Toggle navigation" (click)="toggleCollapsed()">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div id="navbarResponsive" [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#" (click)="reset()">Home
-            <span class="sr-only">(current)</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<div class="row justify-content-center row-top-margin">
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">-->
+<!--  <div class="container">-->
+<!--    <a class="navbar-brand" href="#">Golden Shoe</a>-->
+<!--    <button class="navbar-toggler" type="button" data-toggle="collapse"-->
+<!--            data-target="#navbarResponsive" aria-controls="navbarResponsive"-->
+<!--            aria-expanded="false" aria-label="Toggle navigation" (click)="toggleCollapsed()">-->
+<!--      <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
+<!--    <div id="navbarResponsive" [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}">-->
+<!--      <ul class="navbar-nav ml-auto">-->
+<!--        <li class="nav-item active">-->
+<!--          <a class="nav-link" href="#" (click)="reset()">Home-->
+<!--            <span class="sr-only">(current)</span>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</nav>-->
+
+<!--Navigation-->
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <h5 class="my-0 mr-md-auto font-weight-normal">Golden Shoe</h5>
+  <nav class="my-2 my-md-0 mr-md-3">
+    <a class="p-2 text-dark" (click)="reset()" href="#">Home</a>
+    <a class="p-2 text-dark" (click)="showProds()" href="#">Products</a>
+    <a class="p-2 text-dark" href="#">About</a>
+    <a class="p-2 text-dark" href="#">Support</a>
+  </nav>
+  <a class="btn btn-outline-primary" href="#">Sign up</a>
+</div>
+
+<!--Carousel-->
+<div class="row justify-content-center" [hidden]="showProducts">
+  <ngb-carousel *ngIf="images">
+    <ng-template ngbSlide *ngFor="let img of images">
+      <div class="picsum-img-wrapper">
+        <img [src]="img" class="mh-100" style="width: 100%; height: 40vh" alt="Random first slide">
+      </div>
+      <div class="carousel-caption">
+        <!--        <h3>First slide label</h3>-->
+        <button (click)="showProds()" class="btn btn-outline-light">Browse Products</button>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+</div>
+
+<!--Mens/Womens-->
+
+
+
+<!--Products-->
+<div class="row justify-content-center row-top-margin" [hidden]="!showProducts">
   <div class="col-md-9">
     <app-shopping-cart (onOrderFinished)=finishOrder($event) #shoppingCartC
                        [hidden]="orderFinished || shoppingCartC.total == 0"></app-shopping-cart>
@@ -28,3 +61,47 @@
   </div>
 </div>
 
+<footer class="pt-4 my-md-5 pt-md-5 border-top">
+  <div class="row no-margin justify-content-center">
+    <div class="col-6 col-md">
+      <h5>SHIPPING</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Cool stuff</a></li>
+        <li><a class="text-muted" href="#">Random feature</a></li>
+        <li><a class="text-muted" href="#">Team feature</a></li>
+        <li><a class="text-muted" href="#">Stuff for developers</a></li>
+        <li><a class="text-muted" href="#">Another one</a></li>
+        <li><a class="text-muted" href="#">Last time</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-md">
+      <h5>CONTACT US</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Cool stuff</a></li>
+        <li><a class="text-muted" href="#">Random feature</a></li>
+        <li><a class="text-muted" href="#">Team feature</a></li>
+        <li><a class="text-muted" href="#">Stuff for developers</a></li>
+        <li><a class="text-muted" href="#">Another one</a></li>
+        <li><a class="text-muted" href="#">Last time</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-md">
+      <h5>GIFT WRAPPING</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Resource</a></li>
+        <li><a class="text-muted" href="#">Resource name</a></li>
+        <li><a class="text-muted" href="#">Another resource</a></li>
+        <li><a class="text-muted" href="#">Final resource</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-md">
+      <h5>SHOPPING CART</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Team</a></li>
+        <li><a class="text-muted" href="#">Locations</a></li>
+        <li><a class="text-muted" href="#">Privacy</a></li>
+        <li><a class="text-muted" href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

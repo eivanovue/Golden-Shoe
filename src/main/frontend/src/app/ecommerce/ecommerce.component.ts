@@ -12,6 +12,7 @@ import {FiltersComponent} from "./products/filters/filters.component";
 export class EcommerceComponent implements OnInit {
   private collapsed = true;
   orderFinished = false;
+  showProducts = false;
 
   @ViewChild('productsC', {static: false})
   productsC: ProductsComponent;
@@ -21,9 +22,14 @@ export class EcommerceComponent implements OnInit {
 
   @ViewChild('ordersC', {static: false})
   ordersC: OrdersComponent;
+  images = [604, 662, 22, 596].map((n) => `https://picsum.photos/id/${n}/1080/600`);
 
   toggleCollapsed(): void {
     this.collapsed = !this.collapsed;
+  }
+
+  showProds() {
+    this.showProducts = true;
   }
 
   finishOrder(orderFinished: boolean) {
@@ -32,14 +38,11 @@ export class EcommerceComponent implements OnInit {
 
   reset() {
     this.orderFinished = false;
+    this.showProducts = false;
     this.productsC.reset();
     this.shoppingCartC.reset();
     this.ordersC.paid = false;
     this.ordersC.reset();
-  }
-
-  shoppingCartEmpty(): boolean {
-    return this.shoppingCartC.orders.productOrders.length == 0;
   }
 
   ngOnInit(): void {
