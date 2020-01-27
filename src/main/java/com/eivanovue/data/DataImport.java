@@ -1,24 +1,13 @@
 package com.eivanovue.data;
 
-import com.eivanovue.model.Delivery;
-import com.eivanovue.model.Product;
-import com.eivanovue.model.ProductSize;
-import com.eivanovue.model.ProductType;
-import com.eivanovue.service.DeliveryService;
-import com.eivanovue.service.ProductService;
-import com.eivanovue.service.ProductSizeService;
-import com.eivanovue.service.ProductTypeService;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-
+import com.eivanovue.model.*;
+import com.eivanovue.service.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class DataImport {
-
-
 
   public void addDelivery(DeliveryService deliveryService){
     Delivery delivery1 = new Delivery("Standard Delivery", 5, 0);
@@ -72,9 +61,7 @@ public class DataImport {
                           ProductTypeService productTypeService){
 
     List<Products> products = addProductsInfo(productTypeService);
-
     Product product;
-
     for(Products prod : products){
       product = new Product(
         prod.name,
@@ -85,7 +72,6 @@ public class DataImport {
       );
       productService.save(product);
     }
-
   }
 
   private List<Products> addProductsInfo(ProductTypeService productTypeService){
@@ -166,6 +152,17 @@ public class DataImport {
     return products;
   }
 
+  public void addDiscounts(DiscountService discountService) {
+    Discount discount1 = new Discount("DISCOUNT1", LocalDateTime.now().plusMonths(6), 10);
+    Discount discount2 = new Discount("DISCOUNT2", LocalDateTime.now().plusMonths(6), 15);
+    Discount discount3 = new Discount("DISCOUNT3", LocalDateTime.now().plusMonths(6), 20);
+    Discount discount4 = new Discount("DISCOUNT4", LocalDateTime.now().plusMonths(6), 25);
+    discount4.setExpired(true);
+    discountService.save(discount1);
+    discountService.save(discount2);
+    discountService.save(discount3);
+    discountService.save(discount4);
+  }
 }
 
 class Products {

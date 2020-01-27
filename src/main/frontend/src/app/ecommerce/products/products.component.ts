@@ -17,13 +17,13 @@ export class ProductsComponent implements OnInit {
   productOrders: ProductOrder[] = [];
   filteredProductOrders: ProductOrder[] = [];
   products: Product[] = [];
-  sizeSet = false;
   selectedProductOrder: ProductOrder;
   private shoppingCartOrders: ProductOrders;
   sub: Subscription;
   productSelected: boolean = false;
   p: number = 1;
   private sortingId: number;
+  isCollapsed: boolean = false;
 
 
   @Output() showProducts: EventEmitter<boolean>;
@@ -68,13 +68,11 @@ export class ProductsComponent implements OnInit {
         (products: any[]) => {
           this.products = products;
           this.products.forEach(product => {
-            // this.filteredProductOrders.push(new ProductOrder(product, 0));
             this.productOrders.push(new ProductOrder(product, 0));
           })
         },
         (error) => console.log(error)
       );
-
   }
 
   loadOrders() {
@@ -91,6 +89,7 @@ export class ProductsComponent implements OnInit {
     this.loadOrders();
     this.productSelected = false;
     this.p = 1;
+    this.isCollapsed = false;
   }
 
   isProductSelected(product: Product): boolean {

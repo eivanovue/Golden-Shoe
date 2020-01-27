@@ -1,10 +1,7 @@
 package com.eivanovue;
 
 import com.eivanovue.data.DataImport;
-import com.eivanovue.service.DeliveryService;
-import com.eivanovue.service.ProductService;
-import com.eivanovue.service.ProductSizeService;
-import com.eivanovue.service.ProductTypeService;
+import com.eivanovue.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,9 +18,11 @@ public class Application {
 	CommandLineRunner runner(ProductService productService,
 													 ProductSizeService productSizeService,
 													 ProductTypeService productTypeService,
-													 DeliveryService deliveryService) {
+													 DeliveryService deliveryService,
+													 DiscountService discountService) {
 		return args -> {
 			DataImport dataImport = new DataImport();
+			dataImport.addDiscounts(discountService);
 			dataImport.addDelivery(deliveryService);
 			dataImport.addProductsType(productTypeService);
 			dataImport.addProducts(productService, productSizeService, productTypeService);

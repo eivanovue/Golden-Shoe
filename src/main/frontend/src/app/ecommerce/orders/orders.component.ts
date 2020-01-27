@@ -4,6 +4,7 @@ import {Subscription} from "rxjs";
 import {EcommerceService} from "../services/EcommerceService";
 import {Delivery} from "../models/delivery.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Discount} from "../models/discount.model";
 
 @Component({
   selector: 'app-orders',
@@ -19,7 +20,13 @@ export class OrdersComponent implements OnInit {
   sub: Subscription;
   addressForm: FormGroup;
   userForm: FormGroup;
-  public events: any[] = []; // use later to display form changes
+  discount: Discount;
+  discountSet: boolean;
+  voucher: string;
+  public events: any[] = [];
+  isCollapsed: boolean = false;
+  discountValid: boolean = true;
+  discountNotFound: boolean = false;
 
   constructor(private ecommerceService: EcommerceService, private _fb: FormBuilder) {
     this.orders = this.ecommerceService.ProductOrders;
@@ -32,13 +39,13 @@ export class OrdersComponent implements OnInit {
       })
     });
     this.userForm = this._fb.group({
-        name: ['', Validators.required],
-        email: ['', [
-          Validators.required,
-          Validators.email
-        ]],
-        telephone: ['', Validators.required]
-      });
+      name: ['', Validators.required],
+      email: ['', [
+        Validators.required,
+        Validators.email
+      ]],
+      telephone: ['', Validators.required]
+    });
   }
 
   ngOnInit() {
@@ -49,7 +56,7 @@ export class OrdersComponent implements OnInit {
     this.loadTotal();
     this.loadDelivery();
     // subscribe to form changes
-    this.subcribeToFormChanges();
+    this.subscribeToFormChanges();
   }
 
   pay() {
@@ -83,14 +90,47 @@ export class OrdersComponent implements OnInit {
     if (this.selectedDelivery) {
       this.orders.delivery = this.selectedDelivery;
       this.total = this.ecommerceService.Total;
-      this.total = this.total + this.selectedDelivery.price;
+      if(this.discountSet) {
+        this.total = (this.total - this.discount.value) + this.selectedDelivery.price;
+      } else {
+        this.total = this.total + this.selectedDelivery.price;
+      }
     } else {
       this.orders.delivery = this.selectedDelivery;
-      this.total = this.ecommerceService.Total;
+      if(this.discountSet){
+        this.total = this.ecommerceService.Total - this.discount.value;
+      } else {
+        this.total = this.ecommerceService.Total;
+      }
     }
   }
 
-  subcribeToFormChanges() {
+  setDiscount() {
+    this.discountValid = true;
+    this.discountNotFound = false;
+    console.log(this.voucher);
+    this.ecommerceService.getDiscount(this.voucher).then(discount => {
+      if(discount == false){
+        this.discountNotFound = true;
+      } else {
+        // @ts-ignore
+        this.discount = new Discount(discount.id, discount.voucher, discount.expiry, discount.expired, discount.value);
+        this.ecommerceService.checkDiscount(this.voucher).then(valid => {
+          if (valid) {
+            // @ts-ignore
+            this.total -= discount.value;
+            this.discountValid = true;
+            this.discountSet = true;
+            this.orders.discount = this.discount;
+          } else {
+            this.discountValid = false;
+          }
+        });
+      }
+    })
+  }
+
+  subscribeToFormChanges() {
     // initialize stream
     const addressFormValueChanges$ = this.addressForm.valueChanges;
     const userFormValueChanges$ = this.userForm.valueChanges;
@@ -110,5 +150,11 @@ export class OrdersComponent implements OnInit {
     this.addressForm.reset();
     this.userForm.reset();
     this.selectedDelivery = null;
+    this.discount = null;
+    this.discountSet = false;
+    this.voucher = "";
+    this.discountValid = true;
+    this.discountNotFound = false;
+    this.isCollapsed = false;
   }
 }

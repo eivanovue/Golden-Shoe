@@ -3,10 +3,7 @@ package com.eivanovue.controller;
 import com.eivanovue.dto.OrderProductDto;
 import com.eivanovue.enums.OrderStatus;
 import com.eivanovue.model.*;
-import com.eivanovue.service.EmailService;
-import com.eivanovue.service.OrderProductService;
-import com.eivanovue.service.OrderService;
-import com.eivanovue.service.ProductService;
+import com.eivanovue.service.*;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,12 +28,14 @@ public class OrderController {
   private final OrderService orderService;
   private final OrderProductService orderProductService;
   private final EmailService emailService;
+  private final DiscountService discountService;
 
-  public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService, EmailService emailService) {
+  public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService, EmailService emailService, DiscountService discountService) {
     this.productService = productService;
     this.orderService = orderService;
     this.orderProductService = orderProductService;
     this.emailService = emailService;
+    this.discountService = discountService;
   }
 
   @PostMapping
@@ -46,6 +45,7 @@ public class OrderController {
     Delivery delivery = form.getDelivery();
     Address address = form.getAddress();
     User user = form.getUser();
+    Discount discount = form.getDiscount();
 
     //check product exist in db
     validateProductsExistence(formDtos);
@@ -57,6 +57,7 @@ public class OrderController {
     order.setUser(user);
     String reference = orderService.generateReference(order);
     order.setReference(reference);
+
     // set time of order creation and save to db
     order = this.orderService.create(order);
 
@@ -68,6 +69,8 @@ public class OrderController {
     }
 
     order.setOrderProducts(orderProducts);
+    order.setDiscount(discount);
+    discountService.useDiscount(discount.getVoucher());
     this.orderService.update(order);
 
     calculateStocks(orderProducts);
@@ -125,6 +128,7 @@ public class OrderController {
     private Delivery delivery;
     private Address address;
     private User user;
+    private Discount discount;
 
     List<OrderProductDto> getProductOrders() {
       return productOrders;
@@ -146,6 +150,14 @@ public class OrderController {
     }
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public Discount getDiscount() {
+      return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+      this.discount = discount;
+    }
   }
 }
 

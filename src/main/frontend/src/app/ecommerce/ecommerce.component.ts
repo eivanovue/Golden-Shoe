@@ -21,7 +21,7 @@ export class EcommerceComponent implements OnInit {
 
   @ViewChild('ordersC', {static: false})
   ordersC: OrdersComponent;
-  images = [604, 662, 22, 596].map((n) => `https://picsum.photos/id/${n}/1080/400`);
+  images = [604, 662, 22, 596].map((n) => `https://picsum.photos/id/${n}/1080/500`);
 
   toggleCollapsed(): void {
     this.collapsed = !this.collapsed;

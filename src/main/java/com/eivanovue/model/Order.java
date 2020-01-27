@@ -33,6 +33,10 @@ public class Order {
   @JoinColumn(name = "delivery_id")
   private Delivery delivery;
 
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "discount_id")
+  private Discount discount;
+
   @Embedded
   private Address address;
 
@@ -45,6 +49,10 @@ public class Order {
     List<OrderProduct> orderProducts = getOrderProducts();
     for(OrderProduct op : orderProducts) {
       sum += op.getTotalPrice();
+    }
+
+    if(discount != null){
+      return (sum + getDelivery().getPrice()) - discount.getValue();
     }
     return sum + getDelivery().getPrice();
   }
@@ -173,5 +181,13 @@ public class Order {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public Discount getDiscount() {
+    return discount;
+  }
+
+  public void setDiscount(Discount discount) {
+    this.discount = discount;
   }
 }
