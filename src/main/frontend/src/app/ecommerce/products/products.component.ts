@@ -90,6 +90,7 @@ export class ProductsComponent implements OnInit {
     this.ecommerceService.ProductOrders.productOrders = [];
     this.loadOrders();
     this.productSelected = false;
+    this.p = 1;
   }
 
   isProductSelected(product: Product): boolean {
