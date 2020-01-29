@@ -9,5 +9,7 @@ public interface OrderService {
 
   void update(Order order);
 
-  String generateReference(Order order);
+    Order getOrderByReference(String reference);
+
+    String generateReference(Order order);
 }

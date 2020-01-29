@@ -2,6 +2,7 @@ package com.eivanovue.service;
 
 import com.eivanovue.model.Order;
 import com.eivanovue.repository.OrderRepository;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.SequenceGenerator;
@@ -34,6 +35,12 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public void update(Order order) {
     this.orderRepository.save(order);
+  }
+
+  @Override
+  public Order getOrderByReference(String reference){
+    return orderRepository.findByReference(reference)
+            .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
   }
 
   public String generateReference(Order order){

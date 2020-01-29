@@ -9,10 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
@@ -36,6 +33,11 @@ public class OrderController {
     this.orderProductService = orderProductService;
     this.emailService = emailService;
     this.discountService = discountService;
+  }
+
+  @GetMapping
+  public Order get(@RequestParam String reference){
+    return this.orderService.getOrderByReference(reference);
   }
 
   @PostMapping
@@ -70,7 +72,9 @@ public class OrderController {
 
     order.setOrderProducts(orderProducts);
     order.setDiscount(discount);
-    discountService.useDiscount(discount.getVoucher());
+    if(discount != null){
+      discountService.useDiscount(discount.getVoucher());
+    }
     this.orderService.update(order);
 
     calculateStocks(orderProducts);
