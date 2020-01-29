@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", indexes = { @Index(name = "IDX_MYIDX1", columnList = "reference")})
 public class Order {
 
   @Id

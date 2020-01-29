@@ -108,7 +108,6 @@ export class OrdersComponent implements OnInit {
   setDiscount() {
     this.discountValid = true;
     this.discountNotFound = false;
-    console.log(this.voucher);
     this.ecommerceService.getDiscount(this.voucher).then(discount => {
       if(discount == false){
         this.discountNotFound = true;

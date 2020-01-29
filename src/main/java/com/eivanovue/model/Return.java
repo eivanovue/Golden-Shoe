@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(indexes = { @Index(name = "IDX_MYIDX3", columnList = "reference") })
 public class Return {
 
     @Id

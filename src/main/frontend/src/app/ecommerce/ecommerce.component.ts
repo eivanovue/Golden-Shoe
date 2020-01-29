@@ -12,6 +12,7 @@ export class EcommerceComponent implements OnInit {
   private collapsed = true;
   orderFinished = false;
   showProducts = false;
+  showSupport = false;
 
   @ViewChild('productsC', {static: false})
   productsC: ProductsComponent;
@@ -28,7 +29,13 @@ export class EcommerceComponent implements OnInit {
   }
 
   showProds() {
+    this.reset();
     this.showProducts = true;
+  }
+
+  showSupp(){
+    this.reset();
+    this.showSupport = true;
   }
 
   finishOrder(orderFinished: boolean) {
@@ -38,6 +45,7 @@ export class EcommerceComponent implements OnInit {
   reset() {
     this.orderFinished = false;
     this.showProducts = false;
+    this.showSupport = false;
     this.productsC.reset();
     this.shoppingCartC.reset();
     this.ordersC.paid = false;

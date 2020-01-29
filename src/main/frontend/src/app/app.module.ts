@@ -14,6 +14,9 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { FiltersComponent } from './ecommerce/products/filters/filters.component';
 import { SortingComponent } from './ecommerce/products/sorting/sorting.component';
+import { SupportComponent } from './ecommerce/support/support.component';
+import { ChatComponent } from './ecommerce/support/chat/chat.component';
+import {LivechatWidgetModule} from "@livechat/angular-widget";
 
 @NgModule({
   declarations: [
@@ -23,7 +26,9 @@ import { SortingComponent } from './ecommerce/products/sorting/sorting.component
     OrdersComponent,
     ShoppingCartComponent,
     FiltersComponent,
-    SortingComponent
+    SortingComponent,
+    SupportComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +37,8 @@ import { SortingComponent } from './ecommerce/products/sorting/sorting.component
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    LivechatWidgetModule
   ],
   providers: [EcommerceService, SortingService],
   bootstrap: [AppComponent]

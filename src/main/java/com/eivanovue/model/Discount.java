@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(indexes = { @Index(name = "IDX_MYIDX1", columnList = "value") })
+@Table(indexes = { @Index(name = "IDX_MYIDX2", columnList = "voucher") })
 public class Discount {
 
   @Id

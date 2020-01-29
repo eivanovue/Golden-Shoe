@@ -27,7 +27,7 @@
         <a class="p-2 text-dark" (click)="reset()" href="#">Home</a>
         <a class="p-2 text-dark" (click)="showProds()" href="#">Products</a>
         <a class="p-2 text-dark" href="#">About</a>
-        <a class="p-2 text-dark" href="#">Support</a>
+        <a class="p-2 text-dark" (click)="showSupp()" href="#">Support</a>
       </nav>
       <a class="btn btn-outline-primary" href="#">Sign up</a>
     </div>
@@ -35,7 +35,7 @@
 </div>
 
 <!--Carousel-->
-<div class="row justify-content-center" [hidden]="showProducts">
+<div class="row justify-content-center" [hidden]="showProducts || showSupport">
   <div class="col-md-10">
     <ngb-carousel *ngIf="images">
       <ng-template ngbSlide *ngFor="let img of images">
@@ -64,6 +64,13 @@
   </div>
   <div class="col-md-10">
     <app-orders #ordersC [hidden]="!orderFinished"></app-orders>
+  </div>
+</div>
+
+<!--Support-->
+<div class="row justify-content-center row-top-margin" [hidden]="!showSupport">
+  <div class="col-md-10">
+    <app-support></app-support>
   </div>
 </div>
 
@@ -103,7 +110,7 @@
           </ul>
         </div>
         <div class="col-6 col-md">
-          <h5>SHOPPING CART</h5>
+          <h5>RETURNS</h5>
           <ul class="list-unstyled text-small">
             <li><a class="text-muted" href="#">Team</a></li>
             <li><a class="text-muted" href="#">Locations</a></li>

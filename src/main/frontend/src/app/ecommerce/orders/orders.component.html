@@ -31,7 +31,7 @@
       <input id="discountVoucher" type="text" class="form-control" placeholder="DISCOUNT10OFF"
              aria-label="Enter a promo code" [(ngModel)]="voucher"/>
       <div style="margin-top: 10px;" class="alert alert-success" role="alert" *ngIf="discountValid && discountSet">
-        Promo code <strong>{{discount.voucher}}</strong> has been applied.
+        Promo code <strong>{{discount.voucher}}</strong> of <strong>${{discount.value}}</strong> has been applied.
       </div>
       <div style="margin-top: 10px;" class="alert alert-danger" role="alert" *ngIf="!discountValid">
         Promo code is expired or has already been used.
