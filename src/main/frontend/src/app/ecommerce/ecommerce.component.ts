@@ -33,11 +33,6 @@ export class EcommerceComponent implements OnInit {
     this.showProducts = true;
   }
 
-  showSupp(){
-    this.reset();
-    this.showSupport = true;
-  }
-
   finishOrder(orderFinished: boolean) {
     this.orderFinished = orderFinished;
   }

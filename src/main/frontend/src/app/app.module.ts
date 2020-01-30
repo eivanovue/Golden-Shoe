@@ -17,6 +17,10 @@ import { SortingComponent } from './ecommerce/products/sorting/sorting.component
 import { SupportComponent } from './ecommerce/support/support.component';
 import { ChatComponent } from './ecommerce/support/chat/chat.component';
 import {LivechatWidgetModule} from "@livechat/angular-widget";
+import { CarouselComponent } from './ecommerce/main/carousel/carousel.component';
+import { NavComponent } from './ecommerce/main/nav/nav.component';
+import { FooterComponent } from './ecommerce/main/footer/footer.component';
+import { AboutComponent } from './ecommerce/about/about.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,11 @@ import {LivechatWidgetModule} from "@livechat/angular-widget";
     FiltersComponent,
     SortingComponent,
     SupportComponent,
-    ChatComponent
+    ChatComponent,
+    CarouselComponent,
+    NavComponent,
+    FooterComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

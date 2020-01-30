@@ -1,72 +1,81 @@
-<div class="row no-margin">
-<p style="width: 100%">
-  <button type="button" class="btn btn-outline-dark btn-lg btn-block" (click)="isCollapsed = !isCollapsed"
-          [attr.aria-expanded]="!isCollapsed" aria-controls="collapse">
-    Filters
-  </button>
-</p>
-  <div id="collapse" [ngbCollapse]="!isCollapsed">
-    <div class="card border card-body">
-      <div class="row justify-content-center no-margin">
-        <app-filters (filter)="onFilter($event)"></app-filters>
+<div class="container">
 
-      </div>
-      <div class="row justify-content-center no-margin">
-        <app-sorting (sort)="onSort($event)"></app-sorting>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row card-deck">
-  <div class="col-lg-4 col-md-2 mb-2" *ngFor="let order of filteredProductOrders | paginate: { itemsPerPage: 9, currentPage: p }">
-    <div class="card">
-      <div class="card-body no-padding">
-        <img class="card-img-top" src={{order.product.pictureUrl}} alt="">
-        <h5 class="card-title">
-          <div class="row no-margin"><div class="product-name">{{order.product.name}}</div></div>
-          <div class="row no-margin justify-content-between">
-            <div class="product-type">{{order.product.productType.name}}</div>
-            <div class="product-price">${{order.product.price | number: 0}}</div>
-          </div>
-        </h5>
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <app-nav></app-nav>
+      <app-shopping-cart></app-shopping-cart>
+      <div class="row no-margin">
+        <p style="width: 100%">
+          <button type="button" class="btn btn-outline-dark btn-lg btn-block" (click)="isCollapsed = !isCollapsed"
+                  [attr.aria-expanded]="!isCollapsed" aria-controls="collapse">
+            Filters
+          </button>
+        </p>
+        <div id="collapse" [ngbCollapse]="!isCollapsed">
+          <div class="card border card-body">
+            <div class="row justify-content-center no-margin">
+              <app-filters (filter)="onFilter($event)"></app-filters>
 
-        <div *ngIf="!isProductSelected(order.product)">
-          <select class="custom-select" [(ngModel)]="order.size" (ngModelChange)="order.setProductSize()" class="form-control" id="sel {{order.product.id}}">
-            <option [ngValue]="null" selected="selected">Select size...</option>
-            <option [ngValue]="size" *ngFor="let size of order.product.productSize">
-              {{size.size}}
-            </option>
-          </select>
-          <div *ngIf="order.size"><p class="product-stock">Items available: {{order.size.stock}}</p></div>
-        </div>
-
-        <div class="row no-margin justify-content-center">
-          <div *ngIf="!isProductSelected(order.product) && order.size">
-            <div class="number-input">
-              <button (click)="decrementQuantity(order)" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
-              <input class="quantity" min="0" max="{{order.size.stock}}" name="quantity" value="0" type="number" [(ngModel)]=order.quantity>
-              <button (click)="incrementQuantity(order)" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+            </div>
+            <div class="row justify-content-center no-margin">
+              <app-sorting (sort)="onSort($event)"></app-sorting>
             </div>
           </div>
         </div>
-        <div class="row no-margin justify-content-center">
-          <div *ngIf="!isProductSelected(order.product) && order.size">
-            <button class="btn btn-primary" (click)="addToCart(order)"
-                    [disabled]="order.quantity <= 0 || order.quantity > order.size.stock" >Add To Cart
-            </button>
-          </div>
-          <div *ngIf="isProductSelected(order.product)">
-            <button class="btn btn-outline-danger btn-block"
-                    (click)="removeFromCart(order)">Remove From Cart
-            </button>
+      </div>
+      <div class="row card-deck">
+        <div class="col-lg-4 col-md-2 mb-2" *ngFor="let order of filteredProductOrders | paginate: { itemsPerPage: 9, currentPage: p }">
+          <div class="card">
+            <div class="card-body no-padding">
+              <img class="card-img-top" src={{order.product.pictureUrl}} alt="">
+              <h5 class="card-title">
+                <div class="row no-margin"><div class="product-name">{{order.product.name}}</div></div>
+                <div class="row no-margin justify-content-between">
+                  <div class="product-type">{{order.product.productType.name}}</div>
+                  <div class="product-price">${{order.product.price | number: 0}}</div>
+                </div>
+              </h5>
+
+              <div *ngIf="!isProductSelected(order.product)">
+                <select class="custom-select" [(ngModel)]="order.size" (ngModelChange)="order.setProductSize()" class="form-control" id="sel {{order.product.id}}">
+                  <option [ngValue]="null" selected="selected">Select size...</option>
+                  <option [ngValue]="size" *ngFor="let size of order.product.productSize">
+                    {{size.size}}
+                  </option>
+                </select>
+                <div *ngIf="order.size"><p class="product-stock">Items available: {{order.size.stock}}</p></div>
+              </div>
+
+              <div class="row no-margin justify-content-center">
+                <div *ngIf="!isProductSelected(order.product) && order.size">
+                  <div class="number-input">
+                    <button (click)="decrementQuantity(order)" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                    <input class="quantity" min="0" max="{{order.size.stock}}" name="quantity" value="0" type="number" [(ngModel)]=order.quantity>
+                    <button (click)="incrementQuantity(order)" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="row no-margin justify-content-center">
+                <div *ngIf="!isProductSelected(order.product) && order.size">
+                  <button class="btn btn-primary" (click)="addToCart(order)"
+                          [disabled]="order.quantity <= 0 || order.quantity > order.size.stock" >Add To Cart
+                  </button>
+                </div>
+                <div *ngIf="isProductSelected(order.product)">
+                  <button class="btn btn-outline-danger btn-block"
+                          (click)="removeFromCart(order)">Remove From Cart
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <br>
+      <div class="row justify-content-end">
+        <pagination-controls class="pagination" (pageChange)="p = $event"></pagination-controls>
+      </div>
+    <app-footer></app-footer>
     </div>
   </div>
 </div>
-<br>
-<div class="row justify-content-end">
-  <pagination-controls class="pagination" (pageChange)="p = $event"></pagination-controls>
-</div>
-
