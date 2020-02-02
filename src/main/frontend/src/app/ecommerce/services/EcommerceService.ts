@@ -4,6 +4,7 @@ import {ProductOrders} from "../models/product-orders.model";
 import {Subject} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Discount} from "../models/discount.model";
+import {ReturnS} from "../models/return.model";
 
 @Injectable()
 export class EcommerceService {
@@ -12,10 +13,12 @@ export class EcommerceService {
   private deliveriesUrl = "/api/deliveries";
   private discountUrl = "/api/discounts";
   private checkDiscountUrl = "api/discounts/check";
+  private returnUrl = "/api/returns";
   private discount: Discount;
   private discountValid: boolean;
   private productOrder: ProductOrder;
   private orders: ProductOrders = new ProductOrders();
+  private orderReturn: ProductOrders = new ProductOrders();
 
   private productOrderSubject = new Subject();
   private ordersSubject = new Subject();
@@ -38,8 +41,37 @@ export class EcommerceService {
     return this.http.post(this.ordersUrl, order);
   }
 
+  saveReturn(aReturn: ReturnS) {
+    return this.http.post(this.returnUrl, aReturn);
+  }
+
   getAllDeliveries() {
     return this.http.get(this.deliveriesUrl);
+  }
+
+  getOrderReturn(orderReference: string) {
+    let params = new HttpParams().set("reference", orderReference);
+    const promise = new Promise((resolve, reject) => {
+      const apiURL = this.ordersUrl;
+      this.http
+        .get<ProductOrders[]>(apiURL, {params: params})
+        .toPromise()
+        .then((res: any) => {
+            // Success
+          this.orderReturn.productOrders = res.orderProducts;
+          this.orderReturn.discount = res.discount;
+          this.orderReturn.user = res.user;
+          this.orderReturn.address = res.address;
+          this.orderReturn.delivery = res.delivery;
+          this.orderReturn.reference = res.reference;
+          // console.log(res);
+          resolve(this.orderReturn);
+          },
+        ).catch(err => {
+        resolve(false);
+      });
+    });
+    return promise;
   }
 
   getDiscount(voucher: string) {
@@ -111,4 +143,6 @@ export class EcommerceService {
     this.total = value;
     this.totalSubject.next();
   }
+
+
 }

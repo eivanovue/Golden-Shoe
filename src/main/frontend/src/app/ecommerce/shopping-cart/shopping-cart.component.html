@@ -9,7 +9,7 @@
         {{ order.product.name }} - Size: {{order.size.size}} - {{ order.quantity}} pcs.
       </li>
     </ul>
-    <button class="btn btn-light btn-block" (click)="finishOrder()"
+    <button formA class="btn btn-light btn-block" (click)="finishOrder()"
             [disabled]="orders.productOrders.length == 0">Checkout
     </button>
   </div>

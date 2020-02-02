@@ -9,7 +9,7 @@ import java.util.Objects;
 public class OrderProduct {
 
   @EmbeddedId
-  @JsonIgnore
+//  @JsonIgnore
   private OrderProductPK pk;
 
   @Column(nullable = false)

@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <app-nav></app-nav>
+      <h2>Check the status of a return request</h2>
+      <hr>
+      <div class="col-md-6">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Return reference" aria-label="Return reference" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Check</button>
+          </div>
+        </div>
+      </div>
+      <h2>Create a return request</h2>
+      <hr>
+      <div class="col-md-6">
+        <label for="returnRequestCreate">Please enter your email address and order reference to continue</label><br>
+        <div id="returnRequestCreate" class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Customer email"
+                 aria-label="Customer email" aria-describedby="button-addon3" [(ngModel)]="customerEmail">
+          <input type="text" class="form-control" placeholder="Order reference"
+                 aria-label="Order reference" aria-describedby="button-addon3" [(ngModel)]="orderReference">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon3" (click)="getOrder()">Create</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="returnProducts.length > 0" class="col-md-6">
+        <div  class="card">
+          <div class="card-body">
+            <h5 class="card-title">ORDER REF: {{orderReference}}</h5>
+            <p class="card-text">Please select the items and their quantity that you wish to return.</p>
+
+            <div *ngFor="let product of returnProducts">
+              <p>
+                <input type="checkbox"
+                       [checked]="product.product.checked"
+                     (change)="product.checked = !product.checked" />
+                {{product.product.name}}, Size {{product.size.size}} ${{product.product.price}} - {{product.quantity}} pcs.
+              </p>
+              <div id="collapse" *ngIf="product.quantity > 1" [ngbCollapse]="!product.checked">
+                <label for="{{product.product.name}}">As you have purchased more than one of this item, please choose how many you would like to return.</label>
+                <div class="number-input">
+                  <button (click)="decrementQuantity(product)" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                  <input id="{{product.product.name}}" class="quantity" min="1" max="{{product.quantity}}" name="quantity" value="0" type="number" [(ngModel)]=product.quantityToReturn>
+                  <button (click)="incrementQuantity(product)" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p>
+              <button (click)="createReturnRequest()" class="btn btn-outline-dark">Create return request</button>&nbsp;
+              <a href="#" class="card-link">Cancel</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div *ngIf="errOrderNotFound" style="margin-top: 10px;" class="alert alert-danger" role="alert">
+          Order has not been found!
+        </div>
+      </div>
+      <app-footer></app-footer>
+    </div>
+  </div>
+</div>

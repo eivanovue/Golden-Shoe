@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./support.component.css']
 })
 export class SupportComponent implements OnInit {
+  isReturnsCollapsed: boolean = false;
+  isReturnsStatusCollapsed: boolean = false;
+  isDeliveryCollapsed: boolean = false;
+
 
   constructor() { }
 

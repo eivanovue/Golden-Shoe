@@ -47,7 +47,7 @@ export class OrdersComponent implements OnInit {
       telephone: ['', Validators.required]
     });
   }
-
+  //TO-DO: Use LocalStorage to keep state of order when page is refreshed!
   ngOnInit() {
     this.paid = false;
     this.sub = this.ecommerceService.OrdersChanged.subscribe(() => {
@@ -67,9 +67,7 @@ export class OrdersComponent implements OnInit {
   }
 
   loadTotal() {
-    this.sub = this.ecommerceService.TotalChanged.subscribe(() => {
-      this.total = this.ecommerceService.Total;
-    });
+    this.total = this.ecommerceService.Total;
   }
 
   loadDelivery() {

@@ -3,6 +3,7 @@ import {ProductOrders} from "../models/product-orders.model";
 import {Subscription} from "rxjs";
 import {EcommerceService} from "../services/EcommerceService";
 import {ProductOrder} from "../models/product-order.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -16,11 +17,15 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   sub: Subscription;
 
   @Output() onOrderFinished: EventEmitter<boolean>;
+  private router: Router;
 
-  constructor(private ecommerceService: EcommerceService) {
+
+  constructor(private ecommerceService: EcommerceService, router: Router) {
+    this.router = router;
     this.total = 0;
     this.orderFinished = false;
     this.onOrderFinished = new EventEmitter<boolean>();
+    this.router = router;
   }
 
   ngOnInit() {
@@ -62,6 +67,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.orderFinished = true;
     this.ecommerceService.Total = this.total;
     this.onOrderFinished.emit(this.orderFinished);
+    this.router.navigate(['/order'])
   }
 
   reset() {

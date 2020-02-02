@@ -44,6 +44,6 @@ public class OrderServiceImpl implements OrderService {
   }
 
   public String generateReference(Order order){
-    return "REF" + LocalDateTime.now().getYear() + seq.incrementAndGet();
+    return "ORDER" + LocalDateTime.now().getYear() + seq.incrementAndGet();
   }
 }

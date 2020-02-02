@@ -10,4 +10,6 @@ public interface ReturnService {
   Return getReturnByReference(String reference);
 
   void createReturn(Return aReturn);
+
+  String generateReference();
 }

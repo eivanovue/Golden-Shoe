@@ -21,6 +21,8 @@ import { CarouselComponent } from './ecommerce/main/carousel/carousel.component'
 import { NavComponent } from './ecommerce/main/nav/nav.component';
 import { FooterComponent } from './ecommerce/main/footer/footer.component';
 import { AboutComponent } from './ecommerce/about/about.component';
+import { ReturnsComponent } from './ecommerce/support/returns/returns.component';
+import { OrdersComponent as CheckOrderComponent } from './ecommerce/support/orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { AboutComponent } from './ecommerce/about/about.component';
     CarouselComponent,
     NavComponent,
     FooterComponent,
-    AboutComponent
+    AboutComponent,
+    ReturnsComponent,
+    CheckOrderComponent
   ],
   imports: [
     BrowserModule,

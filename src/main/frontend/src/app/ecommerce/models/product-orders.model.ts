@@ -10,4 +10,7 @@ export class ProductOrders {
   address: Address = null;
   user: User = null;
   discount: Discount;
+  reference: string;
+
+
 }

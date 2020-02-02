@@ -2,7 +2,6 @@
   <div class="row justify-content-center">
     <div class="col-md-10">
       <app-nav></app-nav>
-
       <div class="card-deck mb-3 text-center">
         <div class="card mb-4 box-shadow">
           <div class="card-body">
@@ -38,10 +37,68 @@
           </div>
         </div>
       </div>
-
       <h2>Frequently asked questions</h2>
+      <hr>
+      <h4>Returns</h4>
+      <!--Request a return-->
+      <p>
+        <button type="button" class="btn btn-link" (click)="isReturnsCollapsed = !isReturnsCollapsed"
+                [attr.aria-expanded]="!isReturnsCollapsed" aria-controls="collapse">
+          How can I request a return for an item I purchased?
+        </button>
+      </p>
+      <div id="collapse" [ngbCollapse]="!isReturnsCollapsed">
+        <div class="card">
+          <div class="card-body">
+            <label for="returnRequest">You have the right to cancel at any time from the moment you place your online order,
+              and up to 14 days from the day you receive your goods. This can be done through our returns page.</label>
+            <p>
+              <a href="returns" id="returnRequest" class="btn btn-outline-dark">Create a return request</a>
+            </p>
+
+          </div>
+        </div>
+      </div>
+      <!--Check status of a return-->
+      <p>
+        <button type="button" class="btn btn-link" (click)="isReturnsStatusCollapsed = !isReturnsStatusCollapsed"
+                [attr.aria-expanded]="!isReturnsStatusCollapsed" aria-controls="collapse">
+          Has my return request been accepted?
+        </button>
+      </p>
+      <div id="collapse2" [ngbCollapse]="!isReturnsStatusCollapsed">
+        <div class="card">
+          <div class="card-body">
+            <label for="returnCheckRequest">You can view the status of your return request by going to the returns
+            page. Simply enter your return reference and click on 'Check Return Status'.</label>
+            <p>
+              <a href="returns" id="returnCheckRequest" class="btn btn-outline-dark">Check status of return request</a>
+            </p>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <h4>Orders</h4>
+      <!--Check status of an order-->
+      <p>
+        <button type="button" class="btn btn-link" (click)="isDeliveryCollapsed = !isDeliveryCollapsed"
+                [attr.aria-expanded]="!isDeliveryCollapsed" aria-controls="collapse">
+          When is my order going to be delivered?
+        </button>
+      </p>
+      <div id="collapse3" [ngbCollapse]="!isDeliveryCollapsed">
+        <div class="card">
+          <div class="card-body">
+            <label for="checkOrderDelivery">Check the status of your order via the Orders page. Simply enter your
+              order reference and email address, then click ‘Track Order’ to open the page displaying your order details.</label>
+            <p>
+              <a href="orders" id="checkOrderDelivery" class="btn btn-outline-dark">Check order status</a>
+            </p>
+          </div>
+        </div>
+      </div>
       <app-footer></app-footer>
     </div>
   </div>
-
 </div>

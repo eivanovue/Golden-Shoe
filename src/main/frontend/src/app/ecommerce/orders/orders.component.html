@@ -1,115 +1,124 @@
-<h1 class="text-center">ORDER DETAILS</h1>
-<br>
-<table class="table table-dark">
-  <thead>
-  <tr>
-    <th scope="col">Product name</th>
-    <th scope="col">Size</th>
-    <th scope="col">Price</th>
-    <th scope="col">Quantity</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let order of orders.productOrders">
-    <td>{{order.product.name}}</td>
-    <td>{{order.size.size}}</td>
-    <td>${{order.product.price}}</td>
-    <td>{{order.quantity}}</td>
-  </tr>
-  </tbody>
-</table>
-<p>
-  <button type="button" class="btn btn-outline-dark" (click)="isCollapsed = !isCollapsed"
-          [attr.aria-expanded]="!isCollapsed" aria-controls="collapse">
-    Use a promo code
-  </button>
-</p>
-<div id="collapse" [ngbCollapse]="!isCollapsed">
-  <div class="card">
-    <div class="card-body">
-      <label for="discountVoucher">Enter a promo code</label>
-      <input id="discountVoucher" type="text" class="form-control" placeholder="DISCOUNT10OFF"
-             aria-label="Enter a promo code" [(ngModel)]="voucher"/>
-      <div style="margin-top: 10px;" class="alert alert-success" role="alert" *ngIf="discountValid && discountSet">
-        Promo code <strong>{{discount.voucher}}</strong> of <strong>${{discount.value}}</strong> has been applied.
-      </div>
-      <div style="margin-top: 10px;" class="alert alert-danger" role="alert" *ngIf="!discountValid">
-        Promo code is expired or has already been used.
-      </div>
-      <div style="margin-top: 10px;" class="alert alert-danger" role="alert" *ngIf="discountNotFound">
-        Promo code has not been found.
-      </div>
-      <p style="margin-top: 8px;">
-        <button [disabled]="discountSet" (click)="setDiscount()" class="btn btn-outline-secondary" type="button" id="button-addon2">Apply</button>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <app-nav></app-nav>
+      <h1 class="text-center">ORDER DETAILS</h1>
+      <br>
+      <table class="table table-dark">
+        <thead>
+        <tr>
+          <th scope="col">Product name</th>
+          <th scope="col">Size</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let order of orders.productOrders">
+          <td>{{order.product.name}}</td>
+          <td>{{order.size.size}}</td>
+          <td>${{order.product.price}}</td>
+          <td>{{order.quantity}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <p>
+        <button type="button" class="btn btn-outline-dark" (click)="isCollapsed = !isCollapsed"
+                [attr.aria-expanded]="!isCollapsed" aria-controls="collapse">
+          Use a promo code
+        </button>
       </p>
-    </div>
-  </div>
-</div>
-<br *ngIf="!paid">
-<h2>Customer information</h2>
-<hr>
-<form [formGroup]="userForm">
-  <div class="form-group">
-    <label for="inputName">Full name</label>
-    <input formControlName="name" type="text" class="form-control" id="inputName">
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail">Email</label>
-      <input formControlName="email" type="text" class="form-control" id="inputEmail">
-      <!--        <div class="alert alert-danger" *ngIf="(user.email.dirty || user.email.touched) && user.email.invalid">Email is required.</div>-->
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputTelephone">Telephone</label>
-      <input formControlName="telephone" type="text" class="form-control" id="inputTelephone">
-    </div>
-  </div>
-</form>
-<h2>Shipping address</h2>
-<hr>
-<form [formGroup]="addressForm" novalidate>
-  <div formGroupName="address">
-    <div class="form-group">
-      <label for="inputAddress">Address</label>
-      <input formControlName="street" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputCity">City</label>
-        <input formControlName="city" type="text" class="form-control" id="inputCity">
+      <div id="collapse" [ngbCollapse]="!isCollapsed">
+        <div class="card">
+          <div class="card-body">
+            <label for="discountVoucher">Enter a promo code</label>
+            <input id="discountVoucher" type="text" class="form-control" placeholder="DISCOUNT10OFF"
+                   aria-label="Enter a promo code" [(ngModel)]="voucher"/>
+            <div style="margin-top: 10px;" class="alert alert-success" role="alert" *ngIf="discountValid && discountSet">
+              Promo code <strong>{{discount.voucher}}</strong> of <strong>${{discount.value}}</strong> has been applied.
+            </div>
+            <div style="margin-top: 10px;" class="alert alert-danger" role="alert" *ngIf="!discountValid">
+              Promo code is expired or has already been used.
+            </div>
+            <div style="margin-top: 10px;" class="alert alert-danger" role="alert" *ngIf="discountNotFound">
+              Promo code has not been found.
+            </div>
+            <p style="margin-top: 8px;">
+              <button [disabled]="discountSet" (click)="setDiscount()" class="btn btn-outline-secondary" type="button" id="button-addon2">Apply</button>
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="form-group col-md-4">
-        <label for="inputCountry">Country</label>
-        <select formControlName="country" id="inputCountry" class="form-control">
-          <option selected="selected">Choose...</option>
-          <option>United Kingdom</option>
-        </select>
+      <br *ngIf="!paid">
+      <h2>Customer information</h2>
+      <hr>
+      <form [formGroup]="userForm">
+        <div class="form-group">
+          <label for="inputName">Full name</label>
+          <input formControlName="name" type="text" class="form-control" id="inputName">
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail">Email</label>
+            <input formControlName="email" type="text" class="form-control" id="inputEmail">
+            <!--        <div class="alert alert-danger" *ngIf="(user.email.dirty || user.email.touched) && user.email.invalid">Email is required.</div>-->
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputTelephone">Telephone</label>
+            <input formControlName="telephone" type="text" class="form-control" id="inputTelephone">
+          </div>
+        </div>
+      </form>
+      <h2>Shipping address</h2>
+      <hr>
+      <form [formGroup]="addressForm" novalidate>
+        <div formGroupName="address">
+          <div class="form-group">
+            <label for="inputAddress">Address</label>
+            <input formControlName="street" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputCity">City</label>
+              <input formControlName="city" type="text" class="form-control" id="inputCity">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputCountry">Country</label>
+              <select formControlName="country" id="inputCountry" class="form-control">
+                <option selected="selected">Choose...</option>
+                <option>United Kingdom</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="inputZip">Post code</label>
+              <input formControlName="postCode" type="text" class="form-control" id="inputZip">
+            </div>
+          </div>
+        </div>
+      </form>
+      <h2>Delivery information</h2>
+      <hr>
+      <select [(ngModel)]="selectedDelivery" (ngModelChange)="setDelivery()" class="form-control">
+        <option [ngValue]="null" selected="selected">Select delivery...</option>
+        <option [ngValue]="delivery" *ngFor="let delivery of delivery">
+          {{delivery.name}} - <strong>${{delivery.price}}</strong>
+        </option>
+      </select>
+      <br *ngIf="checkDeliverySet() && !paid">
+      <div class="alert alert-info" role="alert" *ngIf="checkDeliverySet() && !paid">
+        <strong>Delivery information:</strong> Your order will arrive in <strong> {{orders.delivery.days}} day(s) </strong>
       </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Post code</label>
-        <input formControlName="postCode" type="text" class="form-control" id="inputZip">
-      </div>
-    </div>
-  </div>
-</form>
-<h2>Delivery information</h2>
-<hr>
-<select [(ngModel)]="selectedDelivery" (ngModelChange)="setDelivery()" class="form-control">
-  <option [ngValue]="null" selected="selected">Select delivery...</option>
-  <option [ngValue]="delivery" *ngFor="let delivery of delivery">
-    {{delivery.name}} - <strong>${{delivery.price}}</strong>
-  </option>
-</select>
-<br *ngIf="checkDeliverySet() && !paid">
-<div class="alert alert-info" role="alert" *ngIf="checkDeliverySet() && !paid">
-  <strong>Delivery information:</strong> Your order will arrive in <strong> {{orders.delivery.days}} day(s) </strong>
-</div>
-<br>
+      <br>
 
-<button class="btn btn-primary btn-block" (click)="pay()" *ngIf="!paid && checkDeliverySet()">Pay</button>
-<div class="alert alert-success" role="alert" *ngIf="paid">
-  <strong>Congratulation!</strong> You successfully made the order.
-  <strong>Delivery information:</strong> Your order will arrive in {{orders.delivery.days}} day(s)
+      <button class="btn btn-primary btn-block" (click)="pay()" *ngIf="!paid && checkDeliverySet()">Pay</button>
+      <div class="alert alert-success" role="alert" *ngIf="paid">
+        <strong>Congratulation!</strong> You successfully made the order.
+        <strong>Delivery information:</strong> Your order will arrive in {{orders.delivery.days}} day(s)
+      </div>
+      <hr>
+      <h2>Total amount <span class="badge badge-secondary">${{ total | number: 0}}</span></h2>
+
+      <app-footer></app-footer>
+    </div>
+  </div>
 </div>
-<hr>
-<h2>Total amount <span class="badge badge-secondary">${{ total | number: 0}}</span></h2>

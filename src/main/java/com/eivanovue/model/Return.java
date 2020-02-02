@@ -1,7 +1,7 @@
 package com.eivanovue.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -17,29 +17,39 @@ public class Return {
 
     private String reference;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "discount_id")
-    private Order order;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "pk.order")
-    @Valid
-    private List<OrderProduct> orderProduct;
+    @OneToMany
+    @JoinColumn(name = "return_product_id")
+    private List<ReturnProduct> returnProducts;
 
     private String status;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime dateCreated;
 
+    private User user;
+
+    private Address address;
+
+    private double amount;
+
+    private String orderReference;
+
     public Return() {
     }
 
-    public Return(String reference, Order order, @Valid List<OrderProduct> orderProduct, String status, LocalDateTime dateCreated) {
+    public Return(String reference,
+                  @Valid List<ReturnProduct> returnProducts,
+                  User user, Address address,
+                  double amount,
+                  String orderReference) {
         this.reference = reference;
-        this.order = order;
-        this.orderProduct = orderProduct;
-        this.status = status;
-        this.dateCreated = dateCreated;
+        this.returnProducts = returnProducts;
+        this.user = user;
+        this.address = address;
+        this.amount = amount;
+        this.status = "PENDING";
+        this.dateCreated = LocalDateTime.now();
+        this.orderReference = orderReference;
     }
 
     public long getId() {
@@ -50,20 +60,12 @@ public class Return {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public List<ReturnProduct> getReturnProducts() {
+        return returnProducts;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public List<OrderProduct> getOrderProduct() {
-        return orderProduct;
-    }
-
-    public void setOrderProduct(List<OrderProduct> orderProduct) {
-        this.orderProduct = orderProduct;
+    public void setReturnProducts(List<ReturnProduct> returnProducts) {
+        this.returnProducts = returnProducts;
     }
 
     public String getStatus() {
@@ -88,5 +90,37 @@ public class Return {
 
     public void setReference(String reference) {
         this.reference = reference;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getOrderReference() {
+        return orderReference;
+    }
+
+    public void setOrderReference(String orderReference) {
+        this.orderReference = orderReference;
     }
 }
