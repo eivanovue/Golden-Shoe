@@ -8,6 +8,8 @@ export class ReturnS{
   address: Address;
   amount: number;
   orderReference: string;
+  status: string;
+  reference: string;
 
   constructor(returnProducts: ReturnProduct[], user: User, address: Address, amount: number, orderReference: string) {
     this.returnProducts = returnProducts;

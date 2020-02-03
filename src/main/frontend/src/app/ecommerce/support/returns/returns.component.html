@@ -6,12 +6,47 @@
       <hr>
       <div class="col-md-6">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Return reference" aria-label="Return reference" aria-describedby="button-addon2">
+          <input type="text" class="form-control" placeholder="Return reference" [(ngModel)]="returnReference" aria-label="Return reference" aria-describedby="button-addon2">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Check</button>
+            <button (click)="getReturn()" class="btn btn-outline-secondary" type="button" id="button-addon2">Check</button>
           </div>
         </div>
+        <div class="card" *ngIf="aCheckReturn">
+          <div class="card-body"><button (click)="reset()" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            <h5 class="card-title">RETURN REF: {{aCheckReturn.reference}} </h5>
+            <div *ngIf="aCheckReturn.status == 'PENDING'">
+              <h6><span class="badge badge-info">{{aCheckReturn.status}}</span></h6>
+              <p class="card-text">Your return request is submitted and waiting to be received. Bellow are the products you chose to return. You may cancel the return request at any time during the Pending stage.</p>
+            </div>
+            <div *ngIf="aCheckReturn.status == 'APPROVED'">
+              <h6><span class="badge badge-success">{{aCheckReturn.status}}</span></h6>
+              <p class="card-text">You return request has been received and a refund has been issued.</p>
+            </div>
+            <div *ngIf="aCheckReturn.status == 'CANCELED'">
+              <h6><span class="badge badge-danger">{{aCheckReturn.status}}</span></h6>
+              <p class="card-text">The return request has been canceled and no refund was issued.</p>
+            </div>
+
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let product of aCheckReturn.returnProducts">{{product.product.name}} {{product.productSize.size}} {{product.quantityToReturn}} pcs.</li>
+          </ul>
+          <div *ngIf="aCheckReturn.status == 'PENDING'" class="card-body">
+            <!-- TO-DO: Admin function-->
+            <button (click)="approveReturn()" class="btn btn-link">Approve return request</button>
+            <button (click)="cancelReturn()" class="btn btn-link">Cancel return request</button>
+          </div>
+        </div>
+        <div *ngIf="errReturnNotFound" style="margin-top: 10px;" class="alert alert-danger" role="alert">
+          <button (click)="reset()" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          Return request with given reference was not found.
+        </div>
       </div>
+      <br>
       <h2>Create a return request</h2>
       <hr>
       <div class="col-md-6">
@@ -29,14 +64,13 @@
       <div *ngIf="returnProducts.length > 0" class="col-md-6">
         <div  class="card">
           <div class="card-body">
-            <h5 class="card-title">ORDER REF: {{orderReference}}</h5>
+            <h5 class="card-title">ORDER REF: {{orders.reference}}</h5>
             <p class="card-text">Please select the items and their quantity that you wish to return.</p>
-
             <div *ngFor="let product of returnProducts">
               <p>
                 <input type="checkbox"
                        [checked]="product.product.checked"
-                     (change)="product.checked = !product.checked" />
+                       (change)="product.checked = !product.checked" />
                 {{product.product.name}}, Size {{product.size.size}} ${{product.product.price}} - {{product.quantity}} pcs.
               </p>
               <div id="collapse" *ngIf="product.quantity > 1" [ngbCollapse]="!product.checked">
@@ -52,14 +86,34 @@
           <div class="card-body">
             <p>
               <button (click)="createReturnRequest()" class="btn btn-outline-dark">Create return request</button>&nbsp;
-              <a href="#" class="card-link">Cancel</a>
+              <button (click)="reset()" class="btn btn-link">Cancel</button>
             </p>
           </div>
         </div>
       </div>
       <div class="col-md-6">
+        <div *ngIf="requestCompleted" style="margin-top: 10px;" class="alert alert-success" role="alert">
+          <button (click)="reset()" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          Return request has been created and an email should be sent to you containing the reference.
+        </div>
+      </div>
+      <div class="col-md-6">
         <div *ngIf="errOrderNotFound" style="margin-top: 10px;" class="alert alert-danger" role="alert">
+          <button (click)="reset()" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
           Order has not been found!
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div *ngIf="errReturnExists" style="margin-top: 10px;" class="alert alert-info" role="alert">
+          <button (click)="reset()" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          Return request for this order has already been created.
+          You may check the status of a return via the section above using the reference sent to you by email.
         </div>
       </div>
       <app-footer></app-footer>

@@ -19,6 +19,9 @@ public class ReturnProduct {
 
   private Integer quantityToReturn;
 
+  public ReturnProduct() {
+  }
+
   public ReturnProduct(Product product, ProductSize productSize, Integer quantityToReturn) {
     this.product = product;
     this.productSize = productSize;

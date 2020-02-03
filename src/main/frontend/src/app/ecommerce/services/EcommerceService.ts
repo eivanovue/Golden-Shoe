@@ -13,17 +13,21 @@ export class EcommerceService {
   private deliveriesUrl = "/api/deliveries";
   private discountUrl = "/api/discounts";
   private checkDiscountUrl = "api/discounts/check";
+  private checkReturnsUrl = "api/returns/check";
   private returnUrl = "/api/returns";
+  private returnApproveUrl = "/api/returns/approve";
+  private returnCancelUrl = "/api/returns/cancel";
   private discount: Discount;
   private discountValid: boolean;
   private productOrder: ProductOrder;
   private orders: ProductOrders = new ProductOrders();
   private orderReturn: ProductOrders = new ProductOrders();
+  private aReturn: ReturnS;
 
   private productOrderSubject = new Subject();
   private ordersSubject = new Subject();
   private totalSubject = new Subject();
-
+  private returnExists: boolean = false;
   private total: number;
 
   ProductOrderChanged = this.productOrderSubject.asObservable();
@@ -45,6 +49,23 @@ export class EcommerceService {
     return this.http.post(this.returnUrl, aReturn);
   }
 
+  checkReturn(reference: string){
+    let params = new HttpParams().set("reference", reference);
+    const promise = new Promise((resolve) => {
+      const apiURL = this.checkReturnsUrl;
+      this.http
+        .get<ReturnS[]>(apiURL, {params: params})
+        .toPromise()
+        .then((res: any) => {
+            // Success
+            this.returnExists = res;
+            resolve(this.returnExists);
+          },
+        );
+    });
+    return promise;
+  }
+
   getAllDeliveries() {
     return this.http.get(this.deliveriesUrl);
   }
@@ -64,7 +85,6 @@ export class EcommerceService {
           this.orderReturn.address = res.address;
           this.orderReturn.delivery = res.delivery;
           this.orderReturn.reference = res.reference;
-          // console.log(res);
           resolve(this.orderReturn);
           },
         ).catch(err => {
@@ -72,6 +92,37 @@ export class EcommerceService {
       });
     });
     return promise;
+  }
+
+  getReturn(reference: string) {
+    let params = new HttpParams().set("reference", reference);
+    const promise = new Promise((resolve, reject) => {
+      const apiURL = this.returnUrl;
+      this.http
+        .get<ReturnS[]>(apiURL, {params: params})
+        .toPromise()
+        .then((res: any) => {
+            // Success
+            this.aReturn = new ReturnS(res.returnProducts,res.user, res.address, res.amount, res.orderReference);
+            this.aReturn.status = res.status;
+            this.aReturn.reference = res.reference;
+            resolve(this.aReturn);
+          },
+        ).catch(err => {
+        resolve(false);
+      });
+    });
+    return promise;
+  }
+
+  cancelReturn(reference: string){
+    let params = new HttpParams().set("reference", reference);
+    return this.http.post(this.returnCancelUrl, params);
+  }
+
+  approveReturn(reference: string){
+    let params = new HttpParams().set("reference", reference);
+    return this.http.post(this.returnApproveUrl, params);
   }
 
   getDiscount(voucher: string) {

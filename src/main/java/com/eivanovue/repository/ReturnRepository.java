@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface ReturnRepository extends CrudRepository<Return, Long> {
+    Optional<Return> getByOrderReference(String reference);
     Optional<Return> findByReference(String reference);
+    boolean existsByOrderReferenceAndStatusEquals(String reference, String status);
 }

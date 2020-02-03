@@ -11,14 +11,19 @@ import {ReturnProduct} from "../../models/return-product.model";
 })
 export class ReturnsComponent implements OnInit {
   orderReference: string;
+  returnReference: string;
   customerEmail: string;
   errOrderNotFound: boolean = false;
+  errReturnExists: boolean = false;
   orders: ProductOrders = new ProductOrders();
   returnProducts: any = [];
   productsToReturn: ReturnProduct[] = [];
   refund: number;
   aReturn: ReturnS;
+  aCheckReturn: ReturnS;
+  errReturnNotFound: boolean = false;
   returnRequestFinished: boolean = false;
+  requestCompleted: boolean = false;
 
   constructor(private ecommerceService: EcommerceService) { }
 
@@ -26,37 +31,46 @@ export class ReturnsComponent implements OnInit {
   }
 
   async getOrder() {
-    await this.ecommerceService.getOrderReturn(this.orderReference).then(order => {
+    this.errOrderNotFound = false;
+    this.errReturnExists = false;
+    this.requestCompleted = false;
+    this.returnProducts = [];
+    await this.ecommerceService.checkReturn(this.orderReference).then(rtn => {
       // @ts-ignore
-      this.orders.productOrders = order.productOrders;
-      // @ts-ignore
-      this.orders.discount = order.discount;
-      // @ts-ignore
-      this.orders.address = order.address;
-      // @ts-ignore
-      this.orders.user = order.user;
-      // @ts-ignore
-      this.orders.delivery = order.delivery;
-      // @ts-ignore
-      this.orders.reference = order.reference;
-
-      this.returnProducts = [];
-      this.errOrderNotFound = false;
-      this.orders.productOrders.forEach(item => {
-        this.returnProducts.push(
-          {
-            'checked': false,
-            // @ts-ignore
-            'product': item.pk.product,
-            'size': item.productSize,
-            'quantity': item.quantity,
-            'quantityToReturn': 1});
-      })
-    }).catch( err => {
-        this.errOrderNotFound = true;
+      this.errReturnExists = rtn;
     });
-    // @ts-ignore
-    console.log(this.returnProducts);
+
+    if(this.errReturnExists == false){
+      await this.ecommerceService.getOrderReturn(this.orderReference).then(order => {
+        // @ts-ignore
+        this.orders.productOrders = order.productOrders;
+        // @ts-ignore
+        this.orders.discount = order.discount;
+        // @ts-ignore
+        this.orders.address = order.address;
+        // @ts-ignore
+        this.orders.user = order.user;
+        // @ts-ignore
+        this.orders.delivery = order.delivery;
+        // @ts-ignore
+        this.orders.reference = order.reference;
+
+        this.returnProducts = [];
+        this.errOrderNotFound = false;
+        this.orders.productOrders.forEach(item => {
+          this.returnProducts.push(
+            {
+              'checked': false,
+              // @ts-ignore
+              'product': item.pk.product,
+              'size': item.productSize,
+              'quantity': item.quantity,
+              'quantityToReturn': 1});
+        })
+      }).catch( err => {
+        this.errOrderNotFound = true;
+      });
+    }
   }
 
   decrementQuantity(product) {
@@ -74,7 +88,6 @@ export class ReturnsComponent implements OnInit {
   }
 
   createReturnRequest() {
-    //create the objects
     this.productsToReturn = [];
     Array.from(this.returnProducts).forEach(rtnProduct => {
       // @ts-ignore
@@ -84,20 +97,34 @@ export class ReturnsComponent implements OnInit {
       }
     });
     if(this.orders.discount){
-      console.log(this.productsToReturn);
-      this.refund = this.findRefunSum() - this.orders.discount.value;
+      this.refund = this.findRefundSum() - this.orders.discount.value;
     } else{
-      this.refund = this.findRefunSum();
-
+      this.refund = this.findRefundSum();
     }
-
     let rtn = new ReturnS(this.productsToReturn, this.orders.user, this.orders.address, this.refund, this.orders.reference);
     this.returnRequestFinished = true;
-    console.log(rtn);
     this.ecommerceService.saveReturn(rtn).subscribe();
+    this.requestCompleted = true;
+    this.returnProducts = [];
+  }
+    
+    reset(){
+      this.orderReference = '';
+      this.customerEmail = '';
+      this.errOrderNotFound = false;
+      this.errReturnExists = false;
+      this.errReturnNotFound = false;
+      this.orders = new ProductOrders();
+      this.returnProducts = [];
+      this.requestCompleted = false;
+      this.productsToReturn = [];
+      this.refund = 0;
+      this.aReturn = null;
+      this.returnRequestFinished = false;
+      this.aCheckReturn = null;
     }
 
-    findRefunSum(){
+    findRefundSum(){
       let sum = 0;
       this.productsToReturn.forEach(item => {
         sum += item.product.price * item.quantityToReturn;
@@ -105,4 +132,31 @@ export class ReturnsComponent implements OnInit {
       return sum;
     }
 
+  async getReturn() {
+    this.aCheckReturn = null;
+    this.errReturnNotFound = false;
+    await this.ecommerceService.getReturn(this.returnReference).then(aReturn => {
+      if(aReturn){
+        // @ts-ignore
+        this.aCheckReturn = new ReturnS(aReturn.returnProducts, aReturn.user, aReturn.address, aReturn.amount, aReturn.orderReference);
+        // @ts-ignore
+        this.aCheckReturn.status = aReturn.status;
+        // @ts-ignore
+        this.aCheckReturn.reference = aReturn.reference;
+      } else {
+        this.aCheckReturn = null;
+        this.errReturnNotFound = true;
+      }
+    });
+  }
+
+  cancelReturn() {
+    this.ecommerceService.cancelReturn(this.aCheckReturn.reference).subscribe();
+    this.reset()
+  }
+
+  approveReturn() {
+    this.ecommerceService.approveReturn(this.aCheckReturn.reference).subscribe();
+    this.reset()
+  }
 }

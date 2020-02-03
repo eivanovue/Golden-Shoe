@@ -11,17 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/returns")
 public class ReturnController {
   private final ReturnService returnService;
-  private final ReturnProductService returnProdctService;
+  private final ReturnProductService returnProductService;
 
-  public ReturnController(ReturnService returnService, ReturnProductService returnProdctService) {
+  public ReturnController(ReturnService returnService, ReturnProductService returnProductService) {
     this.returnService = returnService;
-    this.returnProdctService = returnProdctService;
+    this.returnProductService = returnProductService;
   }
 
   @GetMapping
@@ -29,10 +30,15 @@ public class ReturnController {
     return returnService.getReturnByReference(reference);
   }
 
+  @GetMapping(value = {"check", "/check"})
+  public @NotNull boolean checkReturn(@RequestParam String reference) {
+    return returnService.getReturnByOrderReference(reference);
+  }
+
   @PostMapping
   public ResponseEntity<Return> create(@RequestBody ReturnForm form) {
     List<ReturnProduct> returnProductList = form.getReturnProducts();
-    returnProductList.forEach(this.returnProdctService::createReturnProduct);
+    returnProductList.forEach(this.returnProductService::createReturnProduct);
     Return aReturn = new Return(
       returnService.generateReference(),
       form.getReturnProducts(),
@@ -43,6 +49,7 @@ public class ReturnController {
     );
 
     this.returnService.createReturn(aReturn);
+    this.returnService.sendEmail(aReturn);
 
     String uri = ServletUriComponentsBuilder
       .fromCurrentServletMapping()
@@ -55,5 +62,12 @@ public class ReturnController {
     return new ResponseEntity<>(aReturn, headers, HttpStatus.CREATED);
   }
 
-
+  @PostMapping(value = {"cancel", "/cancel"})
+  public @NotNull void cancelReturn(@RequestParam String reference) {
+    returnService.cancelReturnByReference(reference);
+  }
+  @PostMapping(value = {"approve", "/approve"})
+  public @NotNull void approveReturn(@RequestParam String reference) {
+    returnService.approveReturnByReference(reference);
+  }
 }
