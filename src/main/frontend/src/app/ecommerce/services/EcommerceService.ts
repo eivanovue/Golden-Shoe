@@ -22,6 +22,7 @@ export class EcommerceService {
   private productOrder: ProductOrder;
   private orders: ProductOrders = new ProductOrders();
   private orderReturn: ProductOrders = new ProductOrders();
+  private orderCheck: ProductOrders = new ProductOrders();
   private aReturn: ReturnS;
 
   private productOrderSubject = new Subject();
@@ -93,6 +94,35 @@ export class EcommerceService {
     });
     return promise;
   }
+
+  getOrder(reference: string){
+    let params = new HttpParams().set("reference", reference);
+    const promise = new Promise((resolve, reject) => {
+      const apiURL = this.ordersUrl;
+      this.http
+        .get<ProductOrders[]>(apiURL, {params: params})
+        .toPromise()
+        .then((res: any) => {
+            // Success
+            this.orderCheck.productOrders = res.orderProducts;
+            this.orderCheck.discount = res.discount;
+            this.orderCheck.user = res.user;
+            this.orderCheck.address = res.address;
+            this.orderCheck.delivery = res.delivery;
+            this.orderCheck.reference = res.reference;
+            this.orderCheck.status = res.status;
+            let date = new Date(res.dateCreated);
+            date.setMonth(date.getMonth()-1);
+            this.orderCheck.dateCreated = date;
+            resolve(this.orderCheck);
+          },
+        ).catch(err => {
+        resolve(false);
+      });
+    });
+    return promise;
+  }
+
 
   getReturn(reference: string) {
     let params = new HttpParams().set("reference", reference);

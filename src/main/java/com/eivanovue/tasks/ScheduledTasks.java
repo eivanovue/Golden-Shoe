@@ -1,6 +1,7 @@
 package com.eivanovue.tasks;
 
 import com.eivanovue.model.Discount;
+import com.eivanovue.model.Order;
 import com.eivanovue.model.User;
 import com.eivanovue.service.DiscountService;
 import com.eivanovue.service.EmailService;
@@ -11,8 +12,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 public class ScheduledTasks {
@@ -32,24 +37,32 @@ public class ScheduledTasks {
 //    @Scheduled(cron = "0 30 9 ? * MON")
     @Scheduled(fixedRate = 3600000) // everi hour
     public void generateDiscountVouchers() {
+        ArrayList<Order> orders = new ArrayList<>((Collection<? extends Order>) orderService.getAllOrders());
+        List<Order> filteredOrders = orders
+                .stream()
+                .filter(distinctByKey(order -> order.getUser().getEmail()))
+                .collect(Collectors.toList());
 
-        orderService.getAllOrders().forEach(order -> {
-            StringBuilder voucher = new StringBuilder();
-            String[] initials = order.getUser().getName().split(" ");
+        if(filteredOrders.size() > 0){
+            filteredOrders.forEach(order -> {
+                StringBuilder voucher = new StringBuilder();
+                String[] initials = order.getUser().getName().split(" ");
 
-            for (String initial : initials) {
-                voucher.append(initial.charAt(0));
-            }
+                for (String initial : initials) {
+                    voucher.append(initial.charAt(0));
+                }
 
-            voucher.append(LocalDateTime.now().getYear());
-            voucher.append(seq.incrementAndGet());
+                voucher.append(LocalDateTime.now().getYear());
+                voucher.append(seq.incrementAndGet());
 
-            Discount discount = new Discount(voucher.toString(),LocalDateTime.now().plusMonths(6), 10);
-            discountService.save(discount);
-            sendDiscountVouchers(order.getUser(), discount);
-        });
+                Discount discount = new Discount(voucher.toString(),LocalDateTime.now().plusMonths(6), 10);
+                discountService.save(discount);
+                sendDiscountVouchers(order.getUser(), discount);
+                log.info("Discount vouchers generated.");
+            });
+        }
 
-        log.info("Discount vouchers generated.");
+
     }
 
     public void sendDiscountVouchers(User user, Discount discount){
@@ -60,5 +73,12 @@ public class ScheduledTasks {
                 "Kind regards, \n " +
                 "Golden Shoe team";
         emailService.sendSimpleMessage(user.getEmail(), "Golden Shoe Discount Voucher", message);
+    }
+
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 }

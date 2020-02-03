@@ -11,6 +11,8 @@ export class ProductOrders {
   user: User = null;
   discount: Discount;
   reference: string;
+  status: string;
+  dateCreated: Date;
 
 
 }
