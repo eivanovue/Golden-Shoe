@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="row card-deck">
-        <div class="col-lg-4 col-md-2 mb-2" *ngFor="let order of filteredProductOrders | paginate: { itemsPerPage: 9, currentPage: p }">
+        <div class="col-lg-4 col-md-6 mb-4" *ngFor="let order of filteredProductOrders | paginate: { itemsPerPage: 9, currentPage: p }">
           <div class="card">
             <div class="card-body no-padding">
               <img class="card-img-top" src={{order.product.pictureUrl}} alt="">

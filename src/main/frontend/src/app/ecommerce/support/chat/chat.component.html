@@ -1,3 +1,3 @@
-<button (click)="openChatWindow()" type="button" class="btn btn-lg btn-block btn-outline-primary">Open Live Chat</button>
-<button (click)="hideChatWindow()" type="button" class="btn btn-lg btn-block btn-outline-dark">Close Live Chat</button>
+<button (click)="openChatWindow()" type="button" class="btn btn btn-block btn-outline-primary">Open Live Chat</button>
+<button (click)="hideChatWindow()" type="button" class="btn btn btn-block btn-outline-dark">Close Live Chat</button>
 <livechat-widget #liveChatWidget licenseId="10073628" (onChatLoaded)="onChatLoaded($event)" [visitor]="visitor" [params]="params"></livechat-widget>
