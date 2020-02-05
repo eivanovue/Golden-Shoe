@@ -23,6 +23,8 @@ import { FooterComponent } from './ecommerce/main/footer/footer.component';
 import { AboutComponent } from './ecommerce/about/about.component';
 import { ReturnsComponent } from './ecommerce/support/returns/returns.component';
 import { OrdersComponent as CheckOrderComponent } from './ecommerce/support/orders/orders.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { OrdersComponent as CheckOrderComponent } from './ecommerce/support/orde
     NgbModule,
     ReactiveFormsModule,
     NgxPaginationModule,
-    LivechatWidgetModule
+    LivechatWidgetModule,
+    BrowserAnimationsModule,
+    MatIconModule
   ],
   providers: [EcommerceService, SortingService],
   bootstrap: [AppComponent]
