@@ -5,9 +5,9 @@ import com.eivanovue.repository.OrderRepository;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.SequenceGenerator;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -43,7 +43,16 @@ public class OrderServiceImpl implements OrderService {
             .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
   }
 
+  @Override
+  public void cancelOrder(String reference){
+    Optional<Order> order = this.orderRepository.findByReference(reference);
+    order.ifPresent(value -> {
+      value.setStatus("CANCELED");
+      this.orderRepository.save(value);
+    });
+  }
   public String generateReference(Order order){
     return "ORDER" + LocalDateTime.now().getYear() + seq.incrementAndGet();
   }
+
 }

@@ -36,7 +36,7 @@ public class ReturnServiceImpl implements ReturnService {
     @Override
     public boolean getReturnByOrderReference(String reference){
         return returnRepository
-          .existsByOrderReferenceAndStatusEquals(reference, "PENDING");
+          .existsByOrderReferenceAndStatusEqualsOrOrderReferenceAndStatusEquals(reference, "PENDING", reference, "APPROVED");
     }
 
     @Override

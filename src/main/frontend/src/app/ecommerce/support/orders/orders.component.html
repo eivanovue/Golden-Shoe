@@ -1,10 +1,10 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-md-12">
       <app-nav></app-nav>
-      <h2>Check the status of an order</h2>
+      <h2 style="margin-top: 50px;">Check the status of an order</h2>
       <hr>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Order reference" [(ngModel)]="orderReference" aria-label="Order reference" aria-describedby="button-addon2">
           <div class="input-group-append">
@@ -25,11 +25,12 @@
                 <h6><span class="badge badge-success">{{order.status}}</span></h6>
                 <p class="card-text">Your order was delivered on {{deliveryDate}}.</p>
               </div>
+              <div *ngIf="order.status == 'CANCELED'">
+                <h6><span class="badge badge-danger">{{order.status}}</span></h6>
+                <p class="card-text">Order has been canceled.</p>
+              </div>
             </div>
-            <div *ngIf="order.status == 'CANCELED'">
-              <h6><span class="badge badge-success">{{order.status}}</span></h6>
-              <p class="card-text">Order has been canceled.</p>
-            </div>
+
             <ul class="list-group list-group-flush">
               <li class="list-group-item" *ngFor="let product of products">{{product.product.name}} {{product.size.size}} {{product.quantity}} pcs.</li>
             </ul>
@@ -37,17 +38,15 @@
               <button (click)="cancelOrder()" class="btn btn-link">Cancel order</button>
             </div>
           </div>
-
+        </div>
+        <div *ngIf="errOrderNotFound" style="margin-top: 10px;" class="alert alert-danger" role="alert">
+          <button (click)="reset()" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          Order with given reference was not found.
         </div>
       </div>
-      <div *ngIf="errOrderNotFound" style="margin-top: 10px;" class="alert alert-danger" role="alert">
-        <button (click)="reset()" type="button" class="close" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        Order with given reference was not found.
-      </div>
       <app-footer></app-footer>
-
     </div>
   </div>
 </div>

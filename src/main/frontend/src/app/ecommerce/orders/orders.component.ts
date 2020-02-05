@@ -63,6 +63,8 @@ export class OrdersComponent implements OnInit {
     this.paid = true;
     this.orders.address = this.addressForm.value.address;
     this.orders.user = this.userForm.value;
+    this.addressForm.controls['address'].disable();
+    this.userForm.disable();
     this.ecommerceService.saveOrder(this.orders).subscribe();
   }
 

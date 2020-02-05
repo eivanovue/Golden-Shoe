@@ -137,3 +137,7 @@
 .pagination /deep/ .ngx-pagination .current {
   background: #161616;
 }
+
+.container {
+  padding: 0;
+}

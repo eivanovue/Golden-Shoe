@@ -1,7 +1,9 @@
 <div class="row justify-content-center">
   <div *ngFor="let sort of sorting; let i = index;">
-    <p>
+    <div class="col-lg-12 col-md-12 mb-12">
       <button style="margin-right: 4px;" class="btn btn-outline-dark" (click)="onSort(i)">{{sort.name}}</button>
+    </div>
+    <p>
     </p>
   </div>
 

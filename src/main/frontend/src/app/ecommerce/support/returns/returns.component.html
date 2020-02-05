@@ -1,10 +1,10 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-md-12">
       <app-nav></app-nav>
-      <h2>Check the status of a return request</h2>
+      <h2 style="margin-top: 50px;">Check the status of a return request</h2>
       <hr>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Return reference" [(ngModel)]="returnReference" aria-label="Return reference" aria-describedby="button-addon2">
           <div class="input-group-append">
@@ -49,11 +49,9 @@
       <br>
       <h2>Create a return request</h2>
       <hr>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <label for="returnRequestCreate">Please enter your email address and order reference to continue</label><br>
         <div id="returnRequestCreate" class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Customer email"
-                 aria-label="Customer email" aria-describedby="button-addon3" [(ngModel)]="customerEmail">
           <input type="text" class="form-control" placeholder="Order reference"
                  aria-label="Order reference" aria-describedby="button-addon3" [(ngModel)]="orderReference">
           <div class="input-group-append">
@@ -61,7 +59,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="returnProducts.length > 0" class="col-md-6">
+      <div *ngIf="returnProducts.length > 0" class="col-md-8">
         <div  class="card">
           <div class="card-body">
             <h5 class="card-title">ORDER REF: {{orders.reference}}</h5>
@@ -91,7 +89,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div *ngIf="requestCompleted" style="margin-top: 10px;" class="alert alert-success" role="alert">
           <button (click)="reset()" type="button" class="close" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -99,7 +97,7 @@
           Return request has been created and an email should be sent to you containing the reference.
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div *ngIf="errOrderNotFound" style="margin-top: 10px;" class="alert alert-danger" role="alert">
           <button (click)="reset()" type="button" class="close" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -107,7 +105,7 @@
           Order has not been found!
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div *ngIf="errReturnExists" style="margin-top: 10px;" class="alert alert-info" role="alert">
           <button (click)="reset()" type="button" class="close" aria-label="Close">
             <span aria-hidden="true">&times;</span>

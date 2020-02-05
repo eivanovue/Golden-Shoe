@@ -38,6 +38,7 @@ export class ReturnsComponent implements OnInit {
     await this.ecommerceService.checkReturn(this.orderReference).then(rtn => {
       // @ts-ignore
       this.errReturnExists = rtn;
+      console.log(rtn);
     });
 
     if(this.errReturnExists == false){
@@ -150,13 +151,18 @@ export class ReturnsComponent implements OnInit {
     });
   }
 
-  cancelReturn() {
-    this.ecommerceService.cancelReturn(this.aCheckReturn.reference).subscribe();
-    this.reset()
+  async cancelReturn() {
+    if(confirm("Are you sure you would like to cancel this return request?")){
+      this.ecommerceService.cancelReturn(this.aCheckReturn.reference).subscribe();
+      this.reset();
+    }
+
   }
 
-  approveReturn() {
-    this.ecommerceService.approveReturn(this.aCheckReturn.reference).subscribe();
-    this.reset()
+  async approveReturn() {
+    if(confirm("Are you sure you would like to approve this return request?")) {
+      this.ecommerceService.approveReturn(this.aCheckReturn.reference).subscribe();
+      this.reset();
+    }
   }
 }

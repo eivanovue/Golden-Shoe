@@ -10,6 +10,7 @@ import {ReturnS} from "../models/return.model";
 export class EcommerceService {
   private productsUrl = "/api/products";
   private ordersUrl = "/api/orders";
+  private cancelOrderUrl = "/api/orders/cancel";
   private deliveriesUrl = "/api/deliveries";
   private discountUrl = "/api/discounts";
   private checkDiscountUrl = "api/discounts/check";
@@ -44,6 +45,11 @@ export class EcommerceService {
 
   saveOrder(order: ProductOrders) {
     return this.http.post(this.ordersUrl, order);
+  }
+
+  cancelOrder(reference: string){
+    let params = new HttpParams().set("reference", reference);
+    return this.http.post(this.cancelOrderUrl, params);
   }
 
   saveReturn(aReturn: ReturnS) {

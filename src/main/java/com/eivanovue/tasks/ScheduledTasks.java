@@ -65,7 +65,7 @@ public class ScheduledTasks {
 
     }
 
-    public void sendDiscountVouchers(User user, Discount discount){
+    private void sendDiscountVouchers(User user, Discount discount){
         String message = "Dear " + user.getName() + ", \n \n" +
                 "Thank you for your patronage. We would like to express our gratitude " +
                 "with something special. For your next order use promo code -  " + discount.getVoucher() +
@@ -75,8 +75,8 @@ public class ScheduledTasks {
         emailService.sendSimpleMessage(user.getEmail(), "Golden Shoe Discount Voucher", message);
     }
 
-    public static <T> Predicate<T> distinctByKey(
-            Function<? super T, ?> keyExtractor) {
+    private static <T> Predicate<T> distinctByKey(
+      Function<? super T, ?> keyExtractor) {
 
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ProductOrders} from "../../models/product-orders.model";
-import {EcommerceComponent} from "../../ecommerce.component";
 import {EcommerceService} from "../../services/EcommerceService";
 
 @Component({
@@ -24,6 +23,9 @@ export class OrdersComponent implements OnInit {
   }
 
   async getOrder() {
+    this.order = null;
+    this.products = []
+    this.errOrderNotFound = false;
     await this.ecommerceService.getOrder(this.orderReference).then(order => {
       if(order){
         this.order = new ProductOrders();
@@ -52,17 +54,17 @@ export class OrdersComponent implements OnInit {
             });
         });
 
-        var deliveryDate = this.addDays(this.order.dateCreated, this.order.delivery.days);
+        var deliveryDate = OrdersComponent.addDays(this.order.dateCreated, this.order.delivery.days);
         this.deliveryDate = deliveryDate.getDate() + " " + this.monthNames[deliveryDate.getMonth()] + " " + deliveryDate.getFullYear();
 
-        // console.log(this.order);
-        // console.log(this.products);
+      } else {
+        this.errOrderNotFound = true;
       }
     })
 
   }
 
-  addDays(date, days) {
+  static addDays(date, days) {
     const copy = new Date(Number(date));
     copy.setDate(date.getDate() + days + 1);
     return copy
@@ -70,10 +72,19 @@ export class OrdersComponent implements OnInit {
 
 
   reset() {
-
+    this.orderReference = null;
+    this.order = null;
+    this.errOrderNotFound = false;
+    this.products = [];
   }
 
   cancelOrder() {
-
+    if(confirm("Are you sure you would like to cancel this order?")){
+      let reference = this.order.reference;
+      this.ecommerceService.cancelOrder(this.order.reference).subscribe();
+      this.reset();
+      this.orderReference = reference;
+      this.getOrder();
+    }
   }
 }

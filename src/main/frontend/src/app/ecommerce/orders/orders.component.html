@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-md-12">
       <app-nav></app-nav>
       <h1 class="text-center">ORDER DETAILS</h1>
       <br>
@@ -23,7 +23,7 @@
         </tbody>
       </table>
       <p>
-        <button type="button" class="btn btn-outline-dark" (click)="isCollapsed = !isCollapsed"
+        <button *ngIf="!paid" type="button" class="btn btn-outline-dark" (click)="isCollapsed = !isCollapsed"
                 [attr.aria-expanded]="!isCollapsed" aria-controls="collapse">
           Use a promo code
         </button>
@@ -32,7 +32,7 @@
         <div class="card">
           <div class="card-body">
             <label for="discountVoucher">Enter a promo code</label>
-            <input id="discountVoucher" type="text" class="form-control" placeholder="DISCOUNT10OFF"
+            <input [disabled]="paid" id="discountVoucher" type="text" class="form-control" placeholder="DISCOUNT10OFF"
                    aria-label="Enter a promo code" [(ngModel)]="voucher"/>
             <div style="margin-top: 10px;" class="alert alert-success" role="alert" *ngIf="discountValid && discountSet">
               Promo code <strong>{{discount.voucher}}</strong> of <strong>${{discount.value}}</strong> has been applied.
@@ -98,7 +98,7 @@
       </form>
       <h2>Delivery information</h2>
       <hr>
-      <select [(ngModel)]="selectedDelivery" (ngModelChange)="setDelivery()" class="form-control">
+      <select [disabled]="paid" [(ngModel)]="selectedDelivery" (ngModelChange)="setDelivery()" class="form-control">
         <option [ngValue]="null" selected="selected">Select delivery...</option>
         <option [ngValue]="delivery" *ngFor="let delivery of delivery">
           {{delivery.name}} - <strong>${{delivery.price}}</strong>

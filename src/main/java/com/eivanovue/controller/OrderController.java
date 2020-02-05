@@ -41,6 +41,11 @@ public class OrderController {
     return this.orderService.getOrderByReference(reference);
   }
 
+  @PostMapping(value = {"cancel", "/cancel"})
+  public void cancelOrder(@RequestParam String reference){
+    this.orderService.cancelOrder(reference);
+  }
+
   @PostMapping
   public ResponseEntity<Order> create(@RequestBody OrderForm form) {
 

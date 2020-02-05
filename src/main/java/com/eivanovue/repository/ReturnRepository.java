@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface ReturnRepository extends CrudRepository<Return, Long> {
     Optional<Return> getByOrderReference(String reference);
     Optional<Return> findByReference(String reference);
-    boolean existsByOrderReferenceAndStatusEquals(String reference, String status);
+    boolean existsByOrderReferenceAndStatusEqualsOrOrderReferenceAndStatusEquals(String reference, String status, String reference2, String status2);
 }

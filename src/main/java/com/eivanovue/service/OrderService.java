@@ -11,7 +11,9 @@ public interface OrderService {
 
   void update(Order order);
 
-    Order getOrderByReference(String reference);
+  Order getOrderByReference(String reference);
 
-    String generateReference(Order order);
+  String generateReference(Order order);
+
+  void cancelOrder(String reference);
 }
