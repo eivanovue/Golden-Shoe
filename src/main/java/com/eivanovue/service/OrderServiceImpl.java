@@ -51,6 +51,15 @@ public class OrderServiceImpl implements OrderService {
       this.orderRepository.save(value);
     });
   }
+
+  @Override
+  public void deliverOrder(String reference){
+    Optional<Order> order = this.orderRepository.findByReference(reference);
+    order.ifPresent(value -> {
+      value.setStatus("DELIVERED");
+      this.orderRepository.save(value);
+    });
+  }
   public String generateReference(Order order){
     return "ORDER" + LocalDateTime.now().getYear() + seq.incrementAndGet();
   }

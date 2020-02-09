@@ -34,8 +34,19 @@ public class ScheduledTasks {
         this.emailService = emailService;
     }
 
-//    @Scheduled(cron = "0 30 9 ? * MON")
-    @Scheduled(fixedRate = 3600000) // everi hour
+    @Scheduled(cron = "0 30 9 ? * MON-FRI")
+    public void deliverOrders(){
+        List<Order> orders = (List<Order>) orderService.getAllOrders();
+        LocalDateTime today = LocalDateTime.now();
+        orders.forEach(order -> {
+           LocalDateTime deliveryDate = order.getDateCreated().plusDays(order.getDelivery().getDays());
+           if(today.isAfter(deliveryDate)){
+               orderService.deliverOrder(order.getReference());
+           }
+        });
+    }
+
+    @Scheduled(cron = "0 30 9 ? * MON")
     public void generateDiscountVouchers() {
         ArrayList<Order> orders = new ArrayList<>((Collection<? extends Order>) orderService.getAllOrders());
         List<Order> filteredOrders = orders
@@ -61,8 +72,6 @@ public class ScheduledTasks {
                 log.info("Discount vouchers generated.");
             });
         }
-
-
     }
 
     private void sendDiscountVouchers(User user, Discount discount){

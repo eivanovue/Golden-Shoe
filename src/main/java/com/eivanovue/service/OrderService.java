@@ -16,4 +16,6 @@ public interface OrderService {
   String generateReference(Order order);
 
   void cancelOrder(String reference);
+
+  void deliverOrder(String reference);
 }
