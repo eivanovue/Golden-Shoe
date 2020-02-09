@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 export class EcommerceComponent implements OnInit {
   orderFinished = false;
   private router: Router;
-  images = [604, 662, 22, 596].map((n) => `https://picsum.photos/id/${n}/1080/500`);
+  images = [604, 662, 22, 596].map((n) => `https://picsum.photos/id/${n}/1080/600`);
 
   constructor(router: Router){
     this.router = router;

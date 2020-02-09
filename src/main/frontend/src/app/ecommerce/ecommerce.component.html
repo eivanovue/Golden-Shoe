@@ -3,7 +3,6 @@
     <div class="col-md-12 col-sm-12">
       <!--Navigation-->
       <app-nav></app-nav>
-      <!--Carousel-->
       <ngb-carousel *ngIf="images">
         <ng-template ngbSlide *ngFor="let img of images">
           <div class="picsum-img-wrapper">
@@ -14,14 +13,37 @@
           </div>
         </ng-template>
       </ngb-carousel>
-    </div>
-  </div>
-  <!--Mens/Womens-->
-  <div class="row justify-content-center row-top-margin">
-    <div class="col-md-12">
+
+
+      <div class="py-5">
+        <div class="row">
+          <!-- DEMO 1 Item-->
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <a href="products"><div class="hover hover-1 text-white rounded"><img src="https://eivanovue.com/shoes/mens/mens1.jpg" alt="">
+              <div class="hover-overlay"></div>
+              <div class="hover-1-content px-5 py-4">
+                <h3 class="hover-1-title text-uppercase font-weight-bold mb-0"> <span class="font-weight-light">FOR </span>HIM</h3>
+                <p class="hover-1-description font-weight-light mb-0">Browse our wide range of shoes specially created for him.</p>
+              </div>
+            </div></a>
+          </div>
+          <!-- DEMO 1 Item-->
+          <div class="col-lg-6">
+            <a href="products"><div class="hover hover-1 text-white rounded"><img src="https://eivanovue.com/shoes/womens/womens1.jpg" alt="">
+              <div class="hover-overlay"></div>
+              <div class="hover-1-content px-5 py-4">
+                <h3 class="hover-1-title text-uppercase font-weight-bold mb-0"> <span class="font-weight-light">FOR </span>HER</h3>
+                <p class="hover-1-description font-weight-light mb-0">Browse our wide range of shoes specially created for her.</p>
+              </div>
+            </div></a>
+          </div>
+        </div>
+      </div>
       <app-footer></app-footer>
     </div>
   </div>
+
+
 </div>
 
 
