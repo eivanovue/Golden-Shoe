@@ -7,5 +7,8 @@
     <a class="p-2 text-dark" href="/about">About</a>
     <a class="p-2 text-dark" href="/support">Support</a>
   </nav>
-  <a class="btn btn-outline-primary" href="#">Sign up</a>
+  <a class="btn btn-outline-primary" *ngIf="!authService.isUserLoggedIn()" href="/login">Sign in</a>
+  <button class="btn btn-outline-primary" *ngIf="authService.isUserLoggedIn()" (click)="authService.logOut()">Sign out</button>
+
+
 </div>

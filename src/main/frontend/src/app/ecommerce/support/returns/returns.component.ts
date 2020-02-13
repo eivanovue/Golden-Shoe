@@ -3,6 +3,7 @@ import {EcommerceService} from "../../services/EcommerceService";
 import {ProductOrders} from "../../models/product-orders.model";
 import {ReturnS} from "../../models/return.model";
 import {ReturnProduct} from "../../models/return-product.model";
+import {AuthenticationService} from "../../services/AuthenticationService";
 
 @Component({
   selector: 'app-returns',
@@ -25,7 +26,7 @@ export class ReturnsComponent implements OnInit {
   returnRequestFinished: boolean = false;
   requestCompleted: boolean = false;
 
-  constructor(private ecommerceService: EcommerceService) { }
+  constructor(private ecommerceService: EcommerceService, private authService: AuthenticationService) { }
 
   ngOnInit() {
   }

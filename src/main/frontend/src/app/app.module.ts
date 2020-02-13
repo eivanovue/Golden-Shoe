@@ -25,6 +25,7 @@ import { ReturnsComponent } from './ecommerce/support/returns/returns.component'
 import { OrdersComponent as CheckOrderComponent } from './ecommerce/support/orders/orders.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
+import { LoginComponent } from './ecommerce/login/login.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {MatIconModule} from '@angular/material/icon';
     FooterComponent,
     AboutComponent,
     ReturnsComponent,
-    CheckOrderComponent
+    CheckOrderComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

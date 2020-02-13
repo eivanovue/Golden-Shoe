@@ -7,6 +7,7 @@ import {SupportComponent} from "./ecommerce/support/support.component";
 import {ReturnsComponent} from "./ecommerce/support/returns/returns.component";
 import {OrdersComponent} from "./ecommerce/support/orders/orders.component";
 import {OrdersComponent as Order} from "./ecommerce/orders/orders.component"
+import {LoginComponent} from "./ecommerce/login/login.component";
 
 
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path: 'support', component: SupportComponent},
   {path: 'returns', component: ReturnsComponent},
   {path: 'orders', component: OrdersComponent},
-  {path: 'order', component: Order}
+  {path: 'order', component: Order},
+  {path: 'login', component: LoginComponent}
 ];
 
 @NgModule({

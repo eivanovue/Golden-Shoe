@@ -35,7 +35,7 @@
           </ul>
           <div *ngIf="aCheckReturn.status == 'PENDING'" class="card-body">
             <!-- TO-DO: Admin function-->
-            <button (click)="approveReturn()" class="btn btn-link">Approve return request</button>
+            <button *ngIf="authService.isUserLoggedIn()" (click)="approveReturn()" class="btn btn-link">Approve return request</button>
             <button (click)="cancelReturn()" class="btn btn-link">Cancel return request</button>
           </div>
         </div>
