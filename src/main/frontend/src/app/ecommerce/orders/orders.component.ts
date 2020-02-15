@@ -79,6 +79,7 @@ export class OrdersComponent implements OnInit {
       this.total = this.ecommerceService.Total;
     } else {
       this.total = this.calculateTotal(this.orders.productOrders);
+      this.ecommerceService.Total = this.total;
     }
   }
 
