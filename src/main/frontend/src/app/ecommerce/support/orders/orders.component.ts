@@ -16,6 +16,7 @@ export class OrdersComponent implements OnInit {
   monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
+  dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   constructor(private ecommerceService: EcommerceService) { }
 
@@ -55,8 +56,9 @@ export class OrdersComponent implements OnInit {
         });
         //I hate javascript dates.....
         let date = this.order.dateCreated.toString().split("/");
-        let deliveryDate = new Date(date[2], date[1], date[0]);
-        this.deliveryDate = deliveryDate.getDate() + this.order.delivery.days + "-0" + deliveryDate.getUTCMonth() + "-" + deliveryDate.getFullYear();
+        let deliveryDate = new Date(date[2], date[1] - 1, date[0]);
+        console.log(deliveryDate.getDay());
+        this.deliveryDate = this.dayNames[deliveryDate.getDay() + this.order.delivery.days] + ", " + [deliveryDate.getDate() + this.order.delivery.days] + " of " + this.monthNames[deliveryDate.getUTCMonth()] + " " + deliveryDate.getFullYear();
       } else {
         this.errOrderNotFound = true;
       }
