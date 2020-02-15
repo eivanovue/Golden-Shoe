@@ -12,7 +12,7 @@ export class ProductOrders {
   discount: Discount;
   reference: string;
   status: string;
-  dateCreated: Date;
+  dateCreated: any;
 
 
 }

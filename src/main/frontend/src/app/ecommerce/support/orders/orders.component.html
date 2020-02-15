@@ -19,7 +19,7 @@
               <h5 class="card-title">{{order.reference}} </h5>
               <div *ngIf="order.status == 'PAID'">
                 <h6><span class="badge badge-info">{{order.status}}</span></h6>
-                <p class="card-text">Your order has been paid for and should be delivered {{deliveryDate}}.</p>
+                <p class="card-text">Your order has been paid for and should be delivered on {{deliveryDate}}.</p>
               </div>
               <div *ngIf="order.status == 'DELIVERED'">
                 <h6><span class="badge badge-success">{{order.status}}</span></h6>

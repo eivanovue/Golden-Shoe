@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ProductOrders} from "../../models/product-orders.model";
 import {EcommerceService} from "../../services/EcommerceService";
+import * as moment from 'moment';
+import {del} from "selenium-webdriver/http";
 
 @Component({
   selector: 'app-orders',
@@ -11,7 +13,7 @@ export class OrdersComponent implements OnInit {
   orderReference: string;
   order: ProductOrders = null;
   errOrderNotFound: boolean;
-  deliveryDate: string;
+  deliveryDate: any;
   products: any [] = [];
   monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -24,7 +26,7 @@ export class OrdersComponent implements OnInit {
 
   async getOrder() {
     this.order = null;
-    this.products = []
+    this.products = [];
     this.errOrderNotFound = false;
     await this.ecommerceService.getOrder(this.orderReference).then(order => {
       if(order){
@@ -43,7 +45,7 @@ export class OrdersComponent implements OnInit {
         this.order.discount = order.discount;
         // @ts-ignore
         this.order.reference = order.reference;
-
+        // @ts-ignore
         this.order.productOrders.forEach(item => {
           this.products.push(
             {
@@ -53,21 +55,15 @@ export class OrdersComponent implements OnInit {
               'quantity': item.quantity
             });
         });
-
-        var deliveryDate = OrdersComponent.addDays(this.order.dateCreated, this.order.delivery.days);
-        this.deliveryDate = deliveryDate.getDate() + " " + this.monthNames[deliveryDate.getMonth()] + " " + deliveryDate.getFullYear();
-
+        //I hate javascript dates.....
+        let date = this.order.dateCreated.toString().split("/");
+        let deliveryDate = new Date(date[2], date[1], date[0]);
+        this.deliveryDate = deliveryDate.getDate() + this.order.delivery.days + "-0" + deliveryDate.getUTCMonth() + "-" + deliveryDate.getFullYear();
       } else {
         this.errOrderNotFound = true;
       }
     })
 
-  }
-
-  static addDays(date, days) {
-    const copy = new Date(Number(date));
-    copy.setDate(date.getDate() + days + 1);
-    return copy
   }
 
 

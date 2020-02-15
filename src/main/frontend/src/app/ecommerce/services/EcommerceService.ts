@@ -5,6 +5,7 @@ import {Subject} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Discount} from "../models/discount.model";
 import {ReturnS} from "../models/return.model";
+import * as moment from 'moment';
 
 @Injectable()
 export class EcommerceService {
@@ -35,6 +36,7 @@ export class EcommerceService {
   ProductOrderChanged = this.productOrderSubject.asObservable();
   OrdersChanged = this.ordersSubject.asObservable();
   TotalChanged = this.totalSubject.asObservable();
+
 
   constructor(private http: HttpClient) {
   }
@@ -110,6 +112,7 @@ export class EcommerceService {
         .toPromise()
         .then((res: any) => {
             // Success
+          console.log(res.dateCreated);
             this.orderCheck.productOrders = res.orderProducts;
             this.orderCheck.discount = res.discount;
             this.orderCheck.user = res.user;
@@ -117,9 +120,7 @@ export class EcommerceService {
             this.orderCheck.delivery = res.delivery;
             this.orderCheck.reference = res.reference;
             this.orderCheck.status = res.status;
-            let date = new Date(res.dateCreated);
-            date.setMonth(date.getMonth()-1);
-            this.orderCheck.dateCreated = date;
+            this.orderCheck.dateCreated = res.dateCreated;
             resolve(this.orderCheck);
           },
         ).catch(err => {
