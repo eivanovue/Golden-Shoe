@@ -5,7 +5,6 @@ import {Subject} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Discount} from "../models/discount.model";
 import {ReturnS} from "../models/return.model";
-import * as moment from 'moment';
 
 @Injectable()
 export class EcommerceService {

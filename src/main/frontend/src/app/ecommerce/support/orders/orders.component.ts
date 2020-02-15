@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ProductOrders} from "../../models/product-orders.model";
 import {EcommerceService} from "../../services/EcommerceService";
-import * as moment from 'moment';
-import {del} from "selenium-webdriver/http";
 
 @Component({
   selector: 'app-orders',
