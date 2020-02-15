@@ -25,14 +25,12 @@ public class OrderController {
   private final ProductService productService;
   private final OrderService orderService;
   private final OrderProductService orderProductService;
-  private final EmailService emailService;
   private final DiscountService discountService;
 
   public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService, EmailService emailService, DiscountService discountService) {
     this.productService = productService;
     this.orderService = orderService;
     this.orderProductService = orderProductService;
-    this.emailService = emailService;
     this.discountService = discountService;
   }
 
@@ -84,7 +82,7 @@ public class OrderController {
     this.orderService.update(order);
 
     calculateStocks(orderProducts);
-    sendEmailConfirmation(order);
+    this.orderService.sendEmailConfirmation(order);
     String uri = ServletUriComponentsBuilder
       .fromCurrentServletMapping()
       .path("/orders/{id}")
@@ -95,25 +93,6 @@ public class OrderController {
 
     return new ResponseEntity<>(order, headers, HttpStatus.CREATED);
 
-  }
-
-  private void sendEmailConfirmation(Order order) {
-     String to = order.getUser().getEmail();
-     String subject = "Your order - " + order.getReference();
-     String message =
-         "Dear " + order.getUser().getName() + ",\n" +
-         "\n" +
-         "Thank you for shopping with us! Your order with Golden Shoe has been confirmed and will arrive in" +
-           + order.getDelivery().getDays() + " day(s). You can find the order information bellow."
-         + "\n" + "\n" +
-         "Order reference: " + order.getReference() + "\n" + "\n" +
-
-           order.getStringifiedOrder() + "\n" +
-
-         "Kind regards" + ",\n" +
-         "Golden Shoe Team";
-
-     emailService.sendSimpleMessage(to, subject, message);
   }
 
   private void validateProductsExistence(List<OrderProductDto> orderProducts) {
@@ -132,8 +111,6 @@ public class OrderController {
   private void calculateStocks(List<OrderProduct> orderProducts) {
     orderProducts.forEach(orderProductService::calculateStock);
   }
-
-
 }
 
 

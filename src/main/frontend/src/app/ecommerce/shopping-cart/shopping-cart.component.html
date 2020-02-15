@@ -6,11 +6,14 @@
     <h6 class="card-title">Items bought:</h6>
     <ul>
       <li *ngFor="let order of orders.productOrders">
-        {{ order.product.name }} - Size: {{order.size.size}} - {{ order.quantity}} pcs.
+        {{ order.product.name }} - Size: {{order.productSize.size}} - {{ order.quantity}} pcs.
       </li>
     </ul>
     <button formA class="btn btn-light btn-block" (click)="finishOrder()"
             [disabled]="orders.productOrders.length == 0">Checkout
     </button>
+<!--    <button formA class="btn btn-outline-light btn-block" (click)="clearBasket()"-->
+<!--            [disabled]="orders.productOrders.length == 0">Clear basket-->
+<!--    </button>-->
   </div>
 </div>

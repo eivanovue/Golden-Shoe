@@ -48,6 +48,7 @@
 
               <div class="row no-margin justify-content-center">
                 <div *ngIf="!isProductSelected(order.product) && order.size">
+
                   <div class="number-input">
                     <button (click)="decrementQuantity(order)" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
                     <input class="quantity" min="0" max="{{order.size.stock}}" name="quantity" value="0" type="number" [(ngModel)]=order.quantity>

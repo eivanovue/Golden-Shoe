@@ -57,8 +57,10 @@ export class OrdersComponent implements OnInit {
         //I hate javascript dates.....
         let date = this.order.dateCreated.toString().split("/");
         let deliveryDate = new Date(date[2], date[1] - 1, date[0]);
-        console.log(deliveryDate.getDay());
-        this.deliveryDate = this.dayNames[deliveryDate.getDay() + this.order.delivery.days] + ", " + [deliveryDate.getDate() + this.order.delivery.days] + " of " + this.monthNames[deliveryDate.getUTCMonth()] + " " + deliveryDate.getFullYear();
+        console.log(deliveryDate);
+        deliveryDate = this.addDays(deliveryDate, this.order.delivery.days);
+        console.log(deliveryDate);
+        this.deliveryDate = this.dayNames[deliveryDate.getDay()] + ", " + deliveryDate.getDate() + " of " + this.monthNames[deliveryDate.getUTCMonth()] + " " + deliveryDate.getFullYear();
       } else {
         this.errOrderNotFound = true;
       }
@@ -66,6 +68,10 @@ export class OrdersComponent implements OnInit {
 
   }
 
+  addDays(date, days) {
+    date.setDate(date.getDate() + days);
+    return date;
+  }
 
   reset() {
     this.orderReference = null;
@@ -74,13 +80,13 @@ export class OrdersComponent implements OnInit {
     this.products = [];
   }
 
-  cancelOrder() {
+  async cancelOrder() {
     if(confirm("Are you sure you would like to cancel this order?")){
       let reference = this.order.reference;
       this.ecommerceService.cancelOrder(this.order.reference).subscribe();
       this.reset();
       this.orderReference = reference;
-      this.getOrder();
+      await this.getOrder();
     }
   }
 }

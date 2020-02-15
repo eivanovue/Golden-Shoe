@@ -18,4 +18,6 @@ public interface OrderService {
   void cancelOrder(String reference);
 
   void deliverOrder(String reference);
+
+  void sendEmailConfirmation(Order order);
 }

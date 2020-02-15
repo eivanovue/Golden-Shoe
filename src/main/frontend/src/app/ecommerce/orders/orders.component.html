@@ -16,7 +16,7 @@
         <tbody>
         <tr *ngFor="let order of orders.productOrders">
           <td>{{order.product.name}}</td>
-          <td>{{order.size.size}}</td>
+          <td>{{order.productSize.size}}</td>
           <td>${{order.product.price}}</td>
           <td>{{order.quantity}}</td>
         </tr>
@@ -56,31 +56,71 @@
         <div class="form-group">
           <label for="inputName">Full name</label>
           <input formControlName="name" type="text" class="form-control" id="inputName">
+          <br>
+          <div *ngIf="userForm.controls['name'].invalid && (userForm.controls['name'].dirty || userForm.controls['name'].touched)"
+               class="alert alert-danger">
+
+            <div *ngIf="userForm.controls['name'].errors.required">
+              Name is required.
+            </div>
+          </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="inputEmail">Email</label>
             <input formControlName="email" type="text" class="form-control" id="inputEmail">
-            <!--        <div class="alert alert-danger" *ngIf="(user.email.dirty || user.email.touched) && user.email.invalid">Email is required.</div>-->
+            <br>
+            <div *ngIf="userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched)"
+                 class="alert alert-danger">
+
+              <div *ngIf="userForm.controls['email'].errors.required">
+                Email is required.
+              </div>
+              <div *ngIf="userForm.controls['email'].errors">
+                Invalid email format.
+              </div>
+            </div>
           </div>
           <div class="form-group col-md-6">
             <label for="inputTelephone">Telephone</label>
             <input formControlName="telephone" type="text" class="form-control" id="inputTelephone">
+            <br>
+            <div *ngIf="userForm.controls['telephone'].invalid && (userForm.controls['telephone'].dirty || userForm.controls['telephone'].touched)"
+                 class="alert alert-danger">
+
+              <div *ngIf="userForm.controls['telephone'].errors.required">
+                Telephone is required.
+              </div>
+            </div>
           </div>
         </div>
       </form>
       <h2>Shipping address</h2>
       <hr>
       <form [formGroup]="addressForm" novalidate>
-        <div formGroupName="address">
-          <div class="form-group">
-            <label for="inputAddress">Address</label>
-            <input formControlName="street" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+        <div class="form-group">
+          <label for="inputAddress">Address</label>
+          <input formControlName="street" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+          <br>
+          <div *ngIf="addressForm.controls['street'].invalid && (addressForm.controls['street'].dirty || addressForm.controls['street'].touched)"
+               class="alert alert-danger">
+
+            <div *ngIf="addressForm.controls['street'].errors.required">
+              Street is required.
+            </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputCity">City</label>
               <input formControlName="city" type="text" class="form-control" id="inputCity">
+              <br>
+              <div *ngIf="addressForm.controls['city'].invalid && (addressForm.controls['city'].dirty || addressForm.controls['city'].touched)"
+                   class="alert alert-danger">
+
+                <div *ngIf="addressForm.controls['city'].errors.required">
+                  City is required.
+                </div>
+              </div>
             </div>
             <div class="form-group col-md-4">
               <label for="inputCountry">Country</label>
@@ -88,10 +128,26 @@
                 <option selected="selected">Choose...</option>
                 <option>United Kingdom</option>
               </select>
+              <br>
+              <div *ngIf="addressForm.controls['country'].invalid && (addressForm.controls['country'].dirty || addressForm.controls['country'].touched)"
+                   class="alert alert-danger">
+
+                <div *ngIf="addressForm.controls['country'].errors.required">
+                  Country is required.
+                </div>
+              </div>
             </div>
             <div class="form-group col-md-2">
               <label for="inputZip">Post code</label>
               <input formControlName="postCode" type="text" class="form-control" id="inputZip">
+              <br>
+              <div *ngIf="addressForm.controls['postCode'].invalid && (addressForm.controls['postCode'].dirty || addressForm.controls['postCode'].touched)"
+                   class="alert alert-danger">
+
+                <div *ngIf="addressForm.controls['postCode'].errors.required">
+                  Post code is required.
+                </div>
+              </div>
             </div>
           </div>
         </div>

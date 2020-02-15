@@ -30,7 +30,7 @@ export class EcommerceService {
   private ordersSubject = new Subject();
   private totalSubject = new Subject();
   private returnExists: boolean = false;
-  private total: number;
+  private total: number = 0;
 
   ProductOrderChanged = this.productOrderSubject.asObservable();
   OrdersChanged = this.ordersSubject.asObservable();
@@ -111,7 +111,6 @@ export class EcommerceService {
         .toPromise()
         .then((res: any) => {
             // Success
-          console.log(res.dateCreated);
             this.orderCheck.productOrders = res.orderProducts;
             this.orderCheck.discount = res.discount;
             this.orderCheck.user = res.user;

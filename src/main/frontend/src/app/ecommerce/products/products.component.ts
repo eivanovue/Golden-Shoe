@@ -7,6 +7,9 @@ import {ProductOrders} from "../models/product-orders.model";
 import {SortingService} from "../services/SortingService";
 import {FiltersComponent} from "./filters/filters.component";
 
+import {plainToClass} from "class-transformer";
+
+
 
 @Component({
   selector: 'app-products',
@@ -33,20 +36,24 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.productOrders = [];
+    if(!(localStorage.getItem("products") === null)){
+      this.ecommerceService.ProductOrders = plainToClass(ProductOrders, JSON.parse(localStorage.getItem("products")));
+      this.shoppingCartOrders = plainToClass(ProductOrders, JSON.parse(localStorage.getItem("products")));
+    }
     this.loadProducts();
     this.loadOrders();
   }
 
   getProductIndex(product: Product): number {
     return this.ecommerceService.ProductOrders.productOrders.findIndex(
-      value => value.product === product);
+      value => value.product.id == product.id);
   }
 
   addToCart(order: ProductOrder) {
     this.ecommerceService.SelectedProductOrder = order;
     this.selectedProductOrder = this.ecommerceService.SelectedProductOrder;
     this.productSelected = true;
+    localStorage.setItem('products', JSON.stringify(this.shoppingCartOrders));
   }
 
   removeFromCart(productOrder: ProductOrder) {
@@ -55,11 +62,11 @@ export class ProductsComponent implements OnInit {
       this.shoppingCartOrders.productOrders.splice(
         this.getProductIndex(productOrder.product), 1);
     }
-    this.ecommerceService.ProductOrders = this.shoppingCartOrders;
+    localStorage.setItem('products', JSON.stringify(this.shoppingCartOrders));
+    this.ecommerceService.ProductOrders = plainToClass(ProductOrders, JSON.parse(localStorage.getItem("products")));
     this.shoppingCartOrders = this.ecommerceService.ProductOrders;
     this.productSelected = false;
-    productOrder.size = null;
-    productOrder.quantity = 0;
+    location.reload();
   }
 
   loadProducts() {

@@ -13,6 +13,4 @@ export class ProductOrders {
   reference: string;
   status: string;
   dateCreated: any;
-
-
 }

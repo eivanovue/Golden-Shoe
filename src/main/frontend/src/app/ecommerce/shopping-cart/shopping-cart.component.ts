@@ -4,6 +4,7 @@ import {Subscription} from "rxjs";
 import {EcommerceService} from "../services/EcommerceService";
 import {ProductOrder} from "../models/product-order.model";
 import {Router} from "@angular/router";
+import {plainToClass} from "class-transformer";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -12,7 +13,7 @@ import {Router} from "@angular/router";
 })
 export class ShoppingCartComponent implements OnInit, OnDestroy {
   orderFinished: boolean;
-  orders: ProductOrders;
+  orders: ProductOrders = new ProductOrders();
   total: number;
   sub: Subscription;
 
@@ -29,15 +30,21 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.orders = new ProductOrders();
+    if(localStorage.getItem("products") === null){
+      this.orders = new ProductOrders();
+    } else {
+      this.orders = plainToClass(ProductOrders, JSON.parse(localStorage.getItem("products")));
+    }
     this.loadCart();
     this.loadTotal();
   }
 
   loadTotal() {
-    this.sub = this.ecommerceService.OrdersChanged.subscribe(() => {
-      this.total = this.calculateTotal(this.orders.productOrders);
-    });
+    // this.sub = this.ecommerceService.OrdersChanged.subscribe(() => {
+    //   this.total = this.calculateTotal(this.orders.productOrders);
+    // });
+    this.total = this.calculateTotal(this.orders.productOrders);
+    this.ecommerceService.Total = this.total;
   }
 
   loadCart() {
@@ -51,7 +58,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
 
       this.ecommerceService.ProductOrders = this.orders;
       this.orders = this.ecommerceService.ProductOrders;
-      this.total = this.calculateTotal(this.orders.productOrders);
+      this.loadTotal();
     });
   }
 
@@ -81,4 +88,5 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
+
 }

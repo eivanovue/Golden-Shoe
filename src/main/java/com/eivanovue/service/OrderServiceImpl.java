@@ -15,10 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class OrderServiceImpl implements OrderService {
 
   private final OrderRepository orderRepository;
+  private final EmailService emailService;
   private AtomicInteger seq = new AtomicInteger();
 
-  public OrderServiceImpl(OrderRepository orderRepository) {
+  public OrderServiceImpl(OrderRepository orderRepository, EmailService emailService) {
     this.orderRepository = orderRepository;
+    this.emailService = emailService;
   }
 
   @Override
@@ -62,6 +64,26 @@ public class OrderServiceImpl implements OrderService {
   }
   public String generateReference(Order order){
     return "ORDER" + LocalDateTime.now().getYear() + seq.incrementAndGet();
+  }
+
+  @Override
+  public void sendEmailConfirmation(Order order) {
+    String to = order.getUser().getEmail();
+    String subject = "Your order - " + order.getReference();
+    String message =
+      "Dear " + order.getUser().getName() + ",\n" +
+        "\n" +
+        "Thank you for shopping with us! Your order with Golden Shoe has been confirmed and will arrive in" +
+        + order.getDelivery().getDays() + " day(s). You can find the order information bellow."
+        + "\n" + "\n" +
+        "Order reference: " + order.getReference() + "\n" + "\n" +
+
+        order.getStringifiedOrder() + "\n" +
+
+        "Kind regards" + ",\n" +
+        "Golden Shoe Team";
+
+    emailService.sendSimpleMessage(to, subject, message);
   }
 
 }

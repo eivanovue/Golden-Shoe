@@ -5,6 +5,8 @@ import {EcommerceService} from "../services/EcommerceService";
 import {Delivery} from "../models/delivery.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Discount} from "../models/discount.model";
+import {plainToClass} from "class-transformer";
+import {ProductOrder} from "../models/product-order.model";
 
 @Component({
   selector: 'app-orders',
@@ -31,12 +33,10 @@ export class OrdersComponent implements OnInit {
   constructor(private ecommerceService: EcommerceService, private _fb: FormBuilder) {
     this.orders = this.ecommerceService.ProductOrders;
     this.addressForm = this._fb.group({
-      address: this._fb.group({
         street: ['', Validators.required],
         city: ['', Validators.required],
         country: ['Choose...', Validators.required],
         postCode: ['', Validators.required]
-      })
     });
     this.userForm = this._fb.group({
       name: ['', Validators.required],
@@ -50,9 +50,14 @@ export class OrdersComponent implements OnInit {
   //TO-DO: Use LocalStorage to keep state of order when page is refreshed!
   ngOnInit() {
     this.paid = false;
-    this.sub = this.ecommerceService.OrdersChanged.subscribe(() => {
-      this.orders = this.ecommerceService.ProductOrders;
-    });
+    if(localStorage.getItem("products") === null){
+      this.sub = this.ecommerceService.OrdersChanged.subscribe(() => {
+        this.orders = this.ecommerceService.ProductOrders;
+      });
+    } else {
+      this.orders = plainToClass(ProductOrders, JSON.parse(localStorage.getItem("products")));
+    }
+
     this.loadTotal();
     this.loadDelivery();
     // subscribe to form changes
@@ -61,15 +66,20 @@ export class OrdersComponent implements OnInit {
 
   pay() {
     this.paid = true;
-    this.orders.address = this.addressForm.value.address;
+    this.orders.address = this.addressForm.value;
     this.orders.user = this.userForm.value;
-    this.addressForm.controls['address'].disable();
+    this.addressForm.disable();
     this.userForm.disable();
     this.ecommerceService.saveOrder(this.orders).subscribe();
+    localStorage.removeItem("products");
   }
 
   loadTotal() {
-    this.total = this.ecommerceService.Total;
+    if(localStorage.getItem("products") === null) {
+      this.total = this.ecommerceService.Total;
+    } else {
+      this.total = this.calculateTotal(this.orders.productOrders);
+    }
   }
 
   loadDelivery() {
@@ -80,6 +90,14 @@ export class OrdersComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  private calculateTotal(productOrder: ProductOrder[]): number{
+    let sum = 0;
+    productOrder.forEach(value => {
+      sum += (value.product.price * value. quantity);
+    });
+    return sum;
   }
 
   checkDeliverySet() {
