@@ -47,42 +47,7 @@ public class OrderController {
   @PostMapping
   public ResponseEntity<Order> create(@RequestBody OrderForm form) {
 
-    List<OrderProductDto> formDtos = form.getProductOrders();
-    Delivery delivery = form.getDelivery();
-    Address address = form.getAddress();
-    User user = form.getUser();
-    Discount discount = form.getDiscount();
-
-    //check product exist in db
-    validateProductsExistence(formDtos);
-
-    Order order = new Order();
-    order.setStatus(OrderStatus.PAID.name());
-    order.setDelivery(delivery);
-    order.setAddress(address);
-    order.setUser(user);
-    String reference = orderService.generateReference(order);
-    order.setReference(reference);
-
-    // set time of order creation and save to db
-    order = this.orderService.create(order);
-
-    List<OrderProduct> orderProducts = new ArrayList<>();
-    for(OrderProductDto dto : formDtos){
-      orderProducts.add(orderProductService.create(new OrderProduct(order, productService.getProduct(dto
-        .getProduct()
-        .getId()), dto.getQuantity(), dto.getProductSize())));
-    }
-
-    order.setOrderProducts(orderProducts);
-    order.setDiscount(discount);
-    if(discount != null){
-      discountService.useDiscount(discount.getVoucher());
-    }
-    this.orderService.update(order);
-
-    calculateStocks(orderProducts);
-    this.orderService.sendEmailConfirmation(order);
+    Order order = this.orderService.createOrderFromForm(form);
     String uri = ServletUriComponentsBuilder
       .fromCurrentServletMapping()
       .path("/orders/{id}")
@@ -95,22 +60,7 @@ public class OrderController {
 
   }
 
-  private void validateProductsExistence(List<OrderProductDto> orderProducts) {
-    List<OrderProductDto> list = orderProducts
-      .stream()
-      .filter(op -> Objects.isNull(productService.getProduct(op
-        .getProduct()
-        .getId())))
-      .collect(Collectors.toList());
 
-    if (!CollectionUtils.isEmpty(list)) {
-      new ResourceNotFoundException("Product not found");
-    }
-  }
-
-  private void calculateStocks(List<OrderProduct> orderProducts) {
-    orderProducts.forEach(orderProductService::calculateStock);
-  }
 }
 
 

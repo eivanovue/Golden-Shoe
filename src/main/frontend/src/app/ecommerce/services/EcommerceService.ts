@@ -229,6 +229,4 @@ export class EcommerceService {
     this.total = value;
     this.totalSubject.next();
   }
-
-
 }

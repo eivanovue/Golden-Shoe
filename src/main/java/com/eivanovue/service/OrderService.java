@@ -1,5 +1,6 @@
 package com.eivanovue.service;
 
+import com.eivanovue.dto.OrderForm;
 import com.eivanovue.model.Order;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface OrderService {
   void deliverOrder(String reference);
 
   void sendEmailConfirmation(Order order);
+
+  Order createOrderFromForm(OrderForm form);
 }

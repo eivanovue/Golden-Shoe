@@ -24,7 +24,7 @@ public class Product {
   private List<ProductSize> productSize = new ArrayList<>();
 
   @NotNull(message = "Product type is required.")
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "product_type_id")
   private ProductType productType;
 

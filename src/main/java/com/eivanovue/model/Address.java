@@ -1,6 +1,7 @@
 package com.eivanovue.model;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Pattern;
 
 @Embeddable
 public class Address {
