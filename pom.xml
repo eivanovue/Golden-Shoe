@@ -91,7 +91,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<executable>ng</executable>
+					<executable>npm</executable>
 					<workingDirectory>src/main/frontend</workingDirectory>
 					<arguments>
 						<argument>build</argument>
