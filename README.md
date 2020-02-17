@@ -1,6 +1,6 @@
 # Golden-Shoe
 A well-known British shoe company, Golden Shoe. The application consists of an integration - API (Spring Boot) and front end (Angular). 
-https://eivanovue.com:8080
+http://eivanovue.com:8080
 
 # Opening the project
 Assuming that you have successfully cloned the project, open it in your favourite idea as an existing project, selecting the gradle.build file. 
