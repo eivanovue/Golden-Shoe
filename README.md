@@ -1,4 +1,4 @@
-# Golden-Shoe
+# Golden-Shoes
 A well-known British shoe company, Golden Shoe. The application consists of an integration - API (Spring Boot) and front end (Angular). 
 http://eivanovue.com:8080
 
